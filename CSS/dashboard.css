@@ -1,0 +1,339 @@
+* {
+  font-family: "Inter";
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: black;
+  border-radius: 8px;
+}
+.hidden {
+  display: none;
+}
+.section {
+  display: none;
+}
+.section:not(.hidden) {
+  display: block;
+}
+.active {
+  color: #ffffff;
+  background-color: #34d399;
+}
+.logo {
+  align-content: center;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.medical_logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.sidebar-item {
+  color: #e5e7eb;
+}
+.sidebar-item:hover {
+  color: #000000;
+  background-color: #4ade80;
+}
+.sidebar-item.bg-green-500 {
+  background-color: #34d399;
+}
+.sidebar-item.text-black {
+  color: #000000;
+}
+
+/* Styles for the modal */
+#logoutModal {
+  display: none;
+}
+#logoutModal.show {
+  display: flex;
+}
+#logoutModal .bg-white {
+  max-width: 90%;
+  margin: auto;
+}
+/* Styles for the loading spinner */
+#loadingSpinner {
+  display: none;
+}
+#loadingSpinner.show {
+  display: flex;
+}
+.loading {
+  width: 230px;
+  height: 230px;
+}
+/*ICON styles*/
+
+.dashboard_icon {
+  width: 2.7rem;
+  height: 2.7rem;
+}
+.dashboard_icon-2 {
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 50%;
+}
+.dashboard_icon-3 {
+  width: 2.3rem;
+  height: 2.3rem;
+}
+.dashboard_icon-4 {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+}
+#submenu {
+  position: relative;
+  left: 15px;
+}
+.pass {
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  margin-top: 8px;
+}
+.display-flex {
+  display: flex;
+  padding: 5px;
+  border-radius: 15px;
+  cursor: pointer;
+}
+.display-flex:hover {
+  background-color: green;
+}
+.text-move {
+  position: relative;
+  left: 15px;
+}
+.text-move-2 {
+  position: relative;
+  left: 10px;
+}
+.text-move-3 {
+  position: relative;
+  left: 15px;
+}
+
+/*Chart Dashboard*/
+#statusChart {
+  width: 500px !important;
+  height: 500px !important;
+}
+.circle {
+  width: 180px;
+  height: 180px;
+  max-width: 180px;
+  max-height: 180px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.counting {
+  transition: all 1s ease-in-out;
+  opacity: 0;
+}
+.counting.visible {
+  opacity: 1;
+}
+
+/*Add */
+.add-box {
+  box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(66, 63, 63, 0.692);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease, border 0.3s ease;
+  letter-spacing: 1px;
+}
+
+.add-box::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(27, 95, 27);
+  transform: scaleX(0);
+  transform-origin: left;
+  z-index: 0;
+  transition: transform 0.5s ease;
+  border-radius: 10px;
+}
+
+.add-box:hover::before {
+  transform: scaleX(1);
+}
+
+.add-box:hover {
+  border: 2px solid rgb(52, 107, 52);
+  box-shadow: 15px 0px 15px rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+.add-box > * {
+  position: relative;
+  z-index: 1;
+}
+
+.add {
+  width: 80px;
+  height: 80px;
+  text-align: center;
+}
+.add-staff-section {
+  margin-bottom: 40px;
+}
+.add-text {
+  font-size: 1.3vw;
+  white-space: nowrap;
+}
+.Analytics {
+  margin-bottom: 50px;
+}
+.analytics-icon {
+  width: 100px;
+  height: 100px;
+}
+.back-arrow {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+.back-arrow:hover {
+  scale: 1.1;
+  transition: 0.5s;
+}
+
+/*Input Doctor*/
+.input-doctor {
+  margin-top: 10px;
+}
+.input-doctor:focus {
+  border: 1.5px solid green;
+}
+.label-doctor {
+  font-weight: bold;
+  position: relative;
+  letter-spacing: 1.3px;
+  margin-bottom: 20px !important;
+}
+.add-doctor-form label {
+  margin-bottom: 20px !important;
+}
+.button-doctor {
+  background-color: green;
+  color: white;
+  font-weight: bold;
+  width: 8rem;
+  height: 2rem;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
+  letter-spacing: 1.2px;
+  border-radius: 10px;
+  box-shadow: 20px 10px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  position: relative;
+  top: 10px;
+}
+.button-doctor:hover {
+  transform: translateY(-5px);
+  transition: 0.5s;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* General Container Styles */
+.table-container {
+  overflow-x: auto;
+  background-color: #f0fdf4;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+/* Table Styles */
+.doctors-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  color: #333333;
+}
+.hidden {
+  display: none;
+}
+.no-records {
+  text-align: center;
+}
+mark {
+  background-color: green;
+  color: white;
+  padding: 0 4px;
+}
+.doctors-table th,
+.doctors-table td {
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.doctors-table thead {
+  background: linear-gradient(to right, #48bb78, #2f855a);
+  color: #ffffff;
+  border-radius: 20px;
+}
+
+.doctors-table th {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.doctors-table tbody tr:hover {
+  background-color: #f0fdf4;
+  transition: background-color 0.3s;
+}
+
+/* Action Links */
+.edit-link {
+  color: #38a169;
+  text-decoration: none;
+}
+
+.edit-link:hover {
+  color: #2f855a;
+}
+
+.delete-link {
+  color: #f56565;
+  text-decoration: none;
+}
+
+.delete-link:hover {
+  color: #e53e3e;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .doctors-table th,
+  .doctors-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .doctors-table {
+    font-size: 0.75rem;
+  }
+}
