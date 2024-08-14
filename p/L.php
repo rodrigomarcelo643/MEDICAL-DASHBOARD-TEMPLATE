@@ -36,7 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -120,7 +119,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     document.getElementById('loginForm').addEventListener('submit', function(event) {
       event.preventDefault();
 
-      // Get form data
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
 
@@ -129,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       document.getElementById('spinnerOverlay').classList.remove('hidden');
 
       // Perform AJAX request
-      fetch('', { // Empty URL uses the same file
+      fetch('', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
@@ -145,10 +143,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         document.getElementById('submitButton').innerText = 'Login';
 
         if (data.status === 'success') {
-          // Redirect on success
-          window.location.href = 'd.php'; // Adjust the path as necessary
+          window.location.href = 'd.php';
         } else {
-          // Show error message
           document.getElementById('error').innerText = data.message;
           document.getElementById('error').classList.remove('hidden');
         }
