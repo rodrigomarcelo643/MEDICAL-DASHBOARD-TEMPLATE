@@ -51,7 +51,7 @@ $username = $_SESSION['username'];
   <body class="bg-white flex">
     <!-- Hamburger Icon to Open/Close Sidebar -->
     <span
-      class="absolute text-white text-4xl top-5 left-4 cursor-pointer"
+      class="absolute text-white text-4xl top-5 left-4 cursor-pointer toggle"
       onclick="toggleSidebar()"
       style="position:fixed"
     >
@@ -70,7 +70,7 @@ $username = $_SESSION['username'];
           </div>
           <span
             class="cursor-pointer lg:hidden"
-            style="margin-left: 60px"
+            style="margin-left: 60px;z-index:999;"
             onclick="toggleSidebar()"
           >
             <img src="../Assets/download.png" class="w-8 h-8 rounded-md" />
@@ -196,7 +196,7 @@ $username = $_SESSION['username'];
               <h1 class="text-2xl md:text-3xl font-bold mb-2">
                 Welcome , <?php echo htmlspecialchars($username);  ?> !
               </h1>
-              <p class="text-base md:text-lg text-gray-700">Medical Doctor</p>
+              <p class="text-base md:text-lg text-gray-700">Administrator</p>
             </div>
           </div>
         </div>
@@ -592,7 +592,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <!-- Loading Spinner -->
     <div id="loadingSpinner" class="relative hidden">
-      <img src="../Assets/Pulse-animation.gif" class="loading" />
+      <img src="../Assets/bear_loading.gif" class="loading" />
     </div>
     <script src="../JS/dashboard.js">
     </script>
