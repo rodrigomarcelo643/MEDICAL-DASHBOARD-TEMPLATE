@@ -25,13 +25,13 @@ $username = $_SESSION['username'];
 </head>
 
 <body class="bg-white flex">
-    <!-- Hamburger Icon to Open/Close Sidebar -->
+    <!-- ================================Hamburger Icon to Open/Close Sidebar ======================-->
     <span class="absolute text-white text-4xl top-5 left-4 cursor-pointer toggle" onclick="toggleSidebar()"
         style="position:fixed">
         <img src="../Assets/download.png" class="w-8 h-8 rounded-md" />
     </span>
 
-    <!-- Sidebar -->
+    <!-- ===================Sidebar ======================================-->
     <div class="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-64 overflow-y-auto text-center bg-green-950 hidden lg:block"
         id="sidebar">
         <div class="text-black-100 text-xl">
@@ -106,16 +106,16 @@ $username = $_SESSION['username'];
         </div>
     </div>
 
-    <!-- Main content -->
+    <!--================================ Main content ==============================================-->
     <div class="content flex-1 ml-64 lg:ml-80 p-4 relative">
         <div id="dashboard" class="section hidden p-6">
-            <!-- Welcome Box -->
+            <!-- =========================Welcome Box=========================== -->
             <div class="welcome-box bg-white p-6 rounded-lg shadow-lg mb-8">
                 <div class="flex flex-col md:flex-row items-center md:items-start mb-4">
-                    <!-- Admin Picture -->
+                    <!-- =========================Admin Picture ==================================-->
                     <img src="../Assets/admin_icon.png" alt="Admin Picture"
                         class="w-24 h-24 md:w-30 md:h-30 rounded-full mb-4 md:mb-0 md:mr-4" />
-                    <!-- Welcome Text -->
+                    <!-- ====================Welcome Text ======================= -->
                     <div>
                         <h1 class="text-2xl md:text-3xl font-bold mb-2">
                             Welcome , <?php echo htmlspecialchars($username);  ?> !
@@ -125,10 +125,10 @@ $username = $_SESSION['username'];
                 </div>
             </div>
 
-            <!-- Add Staff Section -->
+            <!-- =========================Add Staff Section ============================-->
             <div class="add-staff-section my-8">
                 <div class="flex justify-around">
-                    <!-- Add Doctor Box -->
+                    <!--======================= Add Doctor Box ===================================-->
                     <div class="add-box bg-blue-500 text-black p-6 rounded-lg shadow-lg cursor-pointer"
                         onclick="showSection('Add_Doctor')">
                         <h3 class="text-xl text-center font-bold mb-2 add-text">
@@ -137,14 +137,14 @@ $username = $_SESSION['username'];
                         <img src="../Assets/add.png" class="add" />
                     </div>
 
-                    <!-- Add Nurse Box -->
+                    <!--========================== Add Nurse Box=============================== -->
                     <div class="add-box bg-green-500 text-black p-6 shadow-lg cursor-pointer"
                         onclick="showSection('Add_Nurse')">
                         <h3 class="text-xl font-bold mb-2 add-text">Add Nurse</h3>
                         <img src="../Assets/add.png" class="add" />
                     </div>
 
-                    <!-- Add Midwife Box -->
+                    <!-- ===========================Add Midwife Box =================================== -->
                     <div class="add-box bg-purple-500 text-black p-6 rounded-lg shadow-lg cursor-pointer"
                         onclick="showSection('Add_midwife')">
                         <h3 class="text-xl font-bold mb-2 add-text">Add Midwife</h3>
@@ -157,15 +157,15 @@ $username = $_SESSION['username'];
                 <h1 class="text-3xl font-bold mr-4">Analytics</h1>
             </div>
 
-            <!-- Total Patients Overview -->
+            <!--============================= Total Patients Overview ======================================-->
             <h2 class="text-2xl font-bold mb-4">Total Patients Overview</h2>
             <canvas id="patientsChart" class="w-full h-96 mb-8"></canvas>
 
-            <!-- Healthcare Population Overview -->
+            <!-- =================================Healthcare Population Overview=================================== -->
             <h2 class="text-2xl font-bold mb-4">Healthcare Population Overview</h2>
             <canvas id="healthcareChart" class="w-full h-96"></canvas>
 
-            <!-- Patient Status Overview -->
+            <!--====================================== Patient Status Overview ==========================================-->
             <h2 class="text-2xl font-bold mb-4">Patient Status Overview</h2>
             <div class="flex flex-wrap justify-around gap-8 mt-8">
                 <div class="circle bg-green-300 border-2 border-green-500 shadow-lg">
@@ -240,7 +240,7 @@ $username = $_SESSION['username'];
         <div id="midwife" class="section hidden">Midwife Content</div>
         <div id="chatbox" class="section hidden">Chatbox Content</div>
 
-        <!-- Add Doctor Section -->
+        <!-- ===============================Add Doctor Section=============================================== -->
         <div id="Add_Doctor" class="section hidden">
             <div class="p-6 bg-white rounded-lg shadow-lg max-w-3xl mx-auto">
                 <img src="../Assets/back_arrow.png" onclick="goBack()" class="back-arrow cursor-pointer mb-4"
@@ -250,21 +250,21 @@ $username = $_SESSION['username'];
                 </h2>
                 <form class="space-y-8" id="doctorForm" method="post" onsubmit="submitDoctorForm(event)">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Last Name  -->
+                        <!--====================== Last Name ================= -->
                         <div class="col-span-2" style="margin-bottom: 15px">
                             <label for="LastName" class="block text-gray-700 font-semibold mb-2 label-doctor">Last
                                 Name</label>
                             <input type="text" id="LastName" name="LastName" required placeholder="Last Name"
                                 class="w-full p-4 border-2 border-green-600 rounded-lg shadow-md focus:outline-none input-doctor" />
                         </div>
-                        <!--First  Name  -->
+                        <!--==============First  Name================  -->
                         <div class="col-span-2 move-input" style="margin-bottom: 15px">
                             <label for="LastName" class="block text-gray-700 font-semibold mb-2 label-doctor">First
                                 Name</label>
                             <input type="text" id="FirstName" name="FirstName" required placeholder="First Name"
                                 class="w-full p-4 border-2 border-green-600 rounded-lg shadow-md focus:outline-none input-doctor" />
                         </div>
-                        <!--Middle Name  -->
+                        <!--===================Middle Name =========== -->
                         <div class="col-span-2 move-input" style="margin-bottom: 15px">
                             <label for="MiddleName" class="block text-gray-700 font-semibold mb-2 label-doctor">Middle
                                 Name</label>
@@ -272,7 +272,7 @@ $username = $_SESSION['username'];
                                 class="w-full p-4 border-2 border-green-600 rounded-lg shadow-md focus:outline-none input-doctor" />
                         </div>
 
-                        <!-- Specialty and Contact Number (Horizontal) -->
+                        <!-- ===========Specialty and Contact Number (Horizontal)============ -->
                         <div style="margin-bottom: 15px">
                             <label for="specialty"
                                 class="block text-gray-700 font-semibold mb-2 label-doctor">Specialty</label>
@@ -288,7 +288,7 @@ $username = $_SESSION['username'];
                                 class="w-full p-4 border-2 border-green-600 rounded-lg shadow-md focus:outline-none input-doctor" />
                         </div>
 
-                        <!-- Email and Date of Birth (Horizontal) -->
+                        <!-- ==============Email and Date of Birth (Horizontal)============-->
                         <div style="margin-bottom: 15px">
                             <label for="email" class="block text-gray-700 font-semibold mb-2 label-doctor">Email
                                 Address</label>
@@ -303,7 +303,7 @@ $username = $_SESSION['username'];
                                 class="w-full p-4 border-2 border-green-600 rounded-lg shadow-md focus:outline-none input-doctor" />
                         </div>
 
-                        <!-- Medical License Number (Vertical) -->
+                        <!-- ==============Medical License Number (Vertical) ================-->
                         <div class="col-span-2" style="margin-bottom: 15px">
                             <label for="licenseNumber"
                                 class="block text-gray-700 font-semibold mb-2 label-doctor">Medical License
@@ -313,7 +313,7 @@ $username = $_SESSION['username'];
                         </div>
                     </div>
 
-                    <!-- Address (Vertical) -->
+                    <!-- =============Address (Vertical) ================-->
                     <div style="margin-bottom: 15px">
                         <label for="address" class="block text-gray-700 font-semibold mb-2 label-doctor">Address</label>
                         <textarea id="address" name="address" required
@@ -321,7 +321,7 @@ $username = $_SESSION['username'];
                             class="w-full p-4 border-2 border-green-600 rounded-lg shadow-md focus:outline-none input-doctor"></textarea>
                     </div>
 
-                    <!-- Submit Button -->
+                    <!-- ==================Submit Button ===============-->
                     <div class="text-left mb-4 button-doctor">
                         <button id="submitButton" type="submit"
                             class="py-3 px-6 bg-green-600 text-gree font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-300">
@@ -333,26 +333,24 @@ $username = $_SESSION['username'];
             </div>
         </div>
 
-        <!-- Add Nurse Section -->
+        <!--======================== Add Nurse Section====================== -->
         <div id="Add_Nurse" class="section hidden">
             <div class="p-4">
                 <img src="../Assets/back_arrow.png" onclick="goBack()" class="back-arrow" />
                 <h2 class="text-2xl font-bold mb-4">Add Nurse</h2>
-                <!-- Add Nurse form or content goes here -->
             </div>
         </div>
 
-        <!-- Add Midwife Section -->
+        <!--=================================== Add Midwife Section ====================-->
         <div id="Add_midwife" class="section hidden">
             <div class="p-4">
                 <img src="../Assets/back_arrow.png" onclick="goBack()" class="back-arrow" />
                 <h2 class="text-2xl font-bold mb-4">Add Midwife</h2>
-                <!-- Add Midwife form or content goes here -->
             </div>
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- ============================Modal For Logout================================  -->
     <div id="logoutModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden"
         style="z-index: 999">
         <div class="bg-white p-6 rounded-md shadow-lg w-11/12 md:w-1/3" style="z-index: 999">
@@ -397,12 +395,11 @@ $username = $_SESSION['username'];
     }
     </script>
 
-    <!-- Loading Spinner -->
+    <!--================================= Loading Spinner ============================-->
     <div id="loadingSpinner" class="relative hidden">
         <img src="../Assets/bear_loading.gif" class="loading" />
     </div>
-    <script src="../JS/dashboard.js">
-    </script>
+    <script src="../JS/dashboard.js"></script>
     <script src="../JS/fetch_addDoctor.js"></script>
     <script src="../JS/dashboard_graph.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
