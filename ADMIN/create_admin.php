@@ -22,7 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $sql = "INSERT INTO admin_credentials (username, password) VALUES ('$admin_username', '$admin_password')";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Admin account created successfully.";
+        echo "
+        <script>
+        alert('Admin account created successfully.');
+        </script>";
     } else {
         echo "Error: " . $conn->error;
     }
