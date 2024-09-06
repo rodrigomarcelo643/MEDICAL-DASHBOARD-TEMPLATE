@@ -1,5 +1,8 @@
 {
-  "name": "finalproject",
+  "name": "your-svelte-app",
+  "scripts": {
+    "build": "rollup -c --environment NODE_ENV:production"
+  },
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
