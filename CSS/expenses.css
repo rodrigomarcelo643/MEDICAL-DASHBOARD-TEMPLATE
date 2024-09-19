@@ -1,0 +1,229 @@
+#infoBox p {
+  margin: 0;
+  font-size: 18px;
+  color: #00796b;
+}
+
+#showFormButton,
+#hideFormButton {
+  background-color: #00796b;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#showFormButton:hover,
+#hideFormButton:hover {
+  background-color: #004d40;
+}
+
+#expenseFormContainer {
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #e8f5e9;
+}
+
+#expenseFormContainer form {
+  display: flex;
+  flex-direction: column;
+}
+
+#expenseFormContainer label {
+  margin-bottom: 5px;
+  font-size: 16px;
+  color: #004d40;
+}
+
+#expenseFormContainer input {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #00796b;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+#expenseFormContainer button[type="submit"] {
+  background-color: #00796b;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#expenseFormContainer button[type="submit"]:hover {
+  background-color: #004d40;
+}
+
+#chartContainer-Expenses {
+  margin-top: 20px;
+  display: flex;
+  width: 550px;
+  margin-left: 60px;
+  justify-content: center;
+}
+@media (max-width: 768px) {
+  #chartContainer-expenses {
+    height: 300px;
+  }
+}
+
+@media (min-width: 769px) {
+  #chartContainer-expenses {
+    height: 400px;
+  }
+}
+
+/*back arrow*/
+.expense-back {
+  width: 35px;
+  height: 35px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.expense-back:hover {
+  scale: 1.1;
+  transition: 0.5s;
+}
+
+/*==========Progress Bar Container*/
+
+/* Container styles */
+.progress-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* Block styles */
+.progress-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Label styles */
+.progress-label {
+  color: black;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+/* Progress circle styles */
+.progress-circle {
+  width: 150px;
+  height: 150px;
+  margin-right: 40px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .progress-circle {
+    width: 100px;
+    height: 100px;
+  }
+
+  .progress-label {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .progress-circle {
+    width: 80px;
+    height: 80px;
+  }
+
+  .progress-label {
+    font-size: 12px;
+  }
+
+  .progress-container {
+    flex-direction: column;
+  }
+}
+
+/* Icon image style */
+.icon-img {
+  width: 38px;
+  height: 38px;
+  margin-left: 10px;
+}
+
+/*Calendar Expenses*/
+.calendar-container {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+#lastUpdated {
+  font-weight: bold;
+}
+
+.calendar-carousel-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.calendar-carousel {
+  display: flex;
+  overflow-x: hidden;
+  gap: 10px;
+}
+
+.calendar-day {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 45px;
+  border-radius: 8px;
+  background-color: #88f14b;
+  font-size: 1.2em;
+  letter-spacing: 0.5px;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+
+.calendar-day.header {
+  background-color: #e0e0e0;
+  color: #333;
+  font-size: 0.8em;
+  font-weight: normal;
+}
+
+.calendar-day.active {
+  background-color: green;
+  color: #ffffff;
+}
+
+@media (max-width: 600px) {
+  .calendar-carousel-wrapper {
+    overflow: hidden;
+  }
+
+  .calendar-carousel {
+    flex: 1;
+    min-width: 100%;
+  }
+
+  .calendar-day {
+    width: 60px;
+    height: 60px;
+  }
+}

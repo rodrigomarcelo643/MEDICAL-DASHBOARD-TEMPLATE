@@ -16,25 +16,3 @@ window.addEventListener("click", function (event) {
     modal.classList.add("hidden");
   }
 });
-function Logout() {
-  hideModal();
-  showLoadingSpinner();
-
-  const logoutTime = getEstimatedLoadTime();
-
-  setTimeout(() => {
-    fetch("logout.php", {
-      method: "POST",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          window.location.replace("L.php");
-        } else {
-          console.error("Logout failed.");
-        }
-      })
-      .catch((error) => console.error("Error during logout:", error))
-      .finally(() => hideLoadingSpinner());
-  }, logoutTime);
-}
