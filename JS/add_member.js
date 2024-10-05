@@ -1,3 +1,4 @@
+// Show and hide the add membership modal
 function showAddMembershipModal() {
   const showElement = document.getElementById("addMemberModal");
   showElement.style.display = "block";
@@ -8,6 +9,7 @@ function hideAddMembershipModal() {
   hideElement.style.display = "none";
 }
 
+// Handle DOMContentLoaded event
 document.addEventListener("DOMContentLoaded", function () {
   const membershipTypeSelect = document.getElementById("membershipType");
   const totalCostElement = document.getElementById("totalCost");
@@ -20,15 +22,16 @@ document.addEventListener("DOMContentLoaded", function () {
     "monthly-pro": 1100,
   };
 
+  // Update total cost based on membership type selection
   function updateTotalCost() {
     const selectedValue = membershipTypeSelect.value;
     const totalCost = membershipCosts[selectedValue] || 100;
 
     totalCostElement.innerHTML = `
-          <span class="total-cost-container">
-            <img src="../Assets/pesos.png" alt="Pesos" class="peso-icon" style="width:28px;height:28px;"/>
-            <span class="cost-number" style="font-size:19px;">${totalCost}.00</span>
-          </span>`;
+      <span class="total-cost-container">
+        <img src="../Assets/pesos.png" alt="Pesos" class="peso-icon" style="width:28px;height:28px;"/>
+        <span class="cost-number" style="font-size:19px;">${totalCost}.00</span>
+      </span>`;
     totalCostHidden.value = totalCost;
   }
 
@@ -36,11 +39,13 @@ document.addEventListener("DOMContentLoaded", function () {
   updateTotalCost();
 });
 
-//==============INSERT MEMBERS================
+// Hide the member form
 function hideMemberForm() {
   const formMember = document.getElementById("addMemberModal");
   formMember.style.display = "none";
 }
+
+// Handle form submission for adding a member
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("memberForm");
 
@@ -55,10 +60,10 @@ document.addEventListener("DOMContentLoaded", () => {
         body: formData,
       });
 
-      const result = await response.text();
+      const result = await response.text(); // Adjust if expecting JSON
       hideMemberForm();
       showModalAddMember(result);
-      console.log("Success MEMBER ADDED ");
+      console.log("Success MEMBER ADDED");
       setTimeout(function () {
         hideModalAddMember();
       }, 4000);
@@ -71,11 +76,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// Hide the success modal for adding a member
 function hideModalAddMember() {
   const modalSuccessMember = document.getElementById("successModal1");
   modalSuccessMember.style.display = "none";
 }
-//Show sa modal progreess
+
+// Show the success modal for adding a member
 function showModalAddMember(message) {
   const modal = document.getElementById("successModal1");
   const closeBtn = document.querySelector("#successModal1 .close");
@@ -103,7 +110,7 @@ function showModalAddMember(message) {
   };
 }
 
-//========CUSTOM SELECT DESIGN==========
+// Custom select design
 const customSelect = document.querySelector(".custom-select");
 const selectElement = customSelect.querySelector("select");
 
@@ -115,7 +122,7 @@ selectElement.addEventListener("blur", () => {
   customSelect.classList.remove("open");
 });
 
-//////////===================RENEWAL====================
+// Show and hide the renewal modal
 function showRenewModal(member) {
   const modal = document.getElementById("renewMemberModal");
   modal.style.display = "block";
@@ -135,16 +142,19 @@ function hideRenewModal() {
   modal.style.display = "none";
 }
 
-//==============Function for Success for submitting the Renew Form
-
+// Show success modal for renewing a member
 function SuccessRenew() {
-  const Renew = document.getElementById("successModalRenew");
-  Renew.style.display = "block";
+  const renew = document.getElementById("successModalRenew");
+  renew.style.display = "block";
 }
+
+// Hide success modal for renewing a member
 function HideSuccessRenew() {
-  const Renew = document.getElementById("successModalRenew");
-  Renew.style.display = "none";
+  const renew = document.getElementById("successModalRenew");
+  renew.style.display = "none";
 }
+
+// Update total cost for renewal
 document
   .getElementById("renewMembershipType")
   .addEventListener("change", updateRenewTotalCost);
@@ -165,13 +175,14 @@ function updateRenewTotalCost() {
   const totalCost = membershipCosts[selectedValue] || 100;
 
   totalCostElement.innerHTML = `
-      <span class="total-cost-container">
-          <img src="../Assets/pesos.png" alt="Pesos" class="peso-icon" style="width:28px;height:28px;"/>
-          <span class="cost-number" style="font-size:19px;">${totalCost}.00</span>
-      </span>`;
+    <span class="total-cost-container">
+      <img src="../Assets/pesos.png" alt="Pesos" class="peso-icon" style="width:28px;height:28px;"/>
+      <span class="cost-number" style="font-size:19px;">${totalCost}.00</span>
+    </span>`;
   totalCostHidden.value = totalCost;
 }
 
+// Handle form submission for renewing a member
 document
   .getElementById("renewMemberForm")
   .addEventListener("submit", function (event) {
@@ -179,11 +190,16 @@ document
 
     const formData = new FormData(this);
 
-    fetch("../P/renew_member.php", {
+    fetch("../p/renew_member.php", {
       method: "POST",
       body: formData,
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok " + response.statusText);
+        }
+        return response.json();
+      })
       .then((data) => {
         if (data.error) {
           alert("Error: " + data.error);
@@ -193,10 +209,7 @@ document
           setTimeout(function () {
             HideSuccessRenew();
           }, 4000);
-          setTimeout;
         }
       })
       .catch((error) => console.error("Error:", error));
   });
-
-//========Function for Members

@@ -4,45 +4,57 @@ function backHistory() {
 }
 
 document.addEventListener("DOMContentLoaded", (event) => {
-  const showFormButton = document.getElementById("showFormButton");
+  const expenseForm = document.getElementById("expenseForm");
+  const modalexpenseForm = document.getElementById("modal-expenses");
 
-  //===========Form Container
-  const expenseFormContainer = document.getElementById("expenseFormContainer");
-  const infoBox = document.getElementById("infoBox");
-  const chartContainer = document.getElementById("chartContainer");
+  expenseForm.addEventListener("submit", function (event) {
+    event.preventDefault(); // Prevent the default form submission
 
-  showFormButton.addEventListener("click", () => {
-    infoBox.classList.add("hidden");
-    expenseFormContainer.classList.remove("hidden");
-    chartContainer.classList.remove("hidden");
-  });
+    const formData = new FormData(expenseForm);
 
-  document
-    .getElementById("expenseForm")
-    .addEventListener("submit", function (event) {
-      event.preventDefault();
-
-      var formData = new FormData(this);
-
-      fetch("../p/add_expense.php", {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.text())
-        .then((data) => {
+    fetch("../p/add_expense.php", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.text())
+      .then((data) => {
+        if (data.includes("success")) {
+          modalexpenseForm.style.display = "none";
           ShowSuccessExpenses();
-          setTimeout(function () {
+          setTimeout(() => {
             HideSuccessExpenses();
           }, 4000);
-          this.reset();
-          loadChart(); //============= Reload the chart after adding an expense
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-    });
+          expenseForm.reset(); // Reset the form after successful submission
+          loadChart();
+        } else {
+          console.error("Error adding expense:", data);
+          alert("Error adding expense: " + data); // Include the error message
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("An error occurred while adding the expense.");
+      });
+  });
+  let chart;
 
-  let chart = null; // ==================Store the chart instance globally
+  function createGradient(ctx, value, maxValue) {
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    const ratio = value / maxValue;
+
+    if (ratio > 0.75) {
+      gradient.addColorStop(0, "red");
+      gradient.addColorStop(1, "rgba(255, 0, 0, 0.5)");
+    } else if (ratio > 0.25) {
+      gradient.addColorStop(0, "rgba(255, 165, 0, 1)");
+      gradient.addColorStop(1, "rgba(255, 165, 0, 0.5)");
+    } else {
+      gradient.addColorStop(0, "#009b7b");
+      gradient.addColorStop(1, "rgba(0, 155, 123, 0.5)");
+    }
+
+    return gradient;
+  }
 
   function loadChart() {
     fetch("../p/get_expenses.php")
@@ -50,77 +62,75 @@ document.addEventListener("DOMContentLoaded", (event) => {
       .then((data) => {
         console.log(data); // Debug: Check data format
 
-        // Ensure data is in the expected format
         if (Array.isArray(data)) {
-          var labels = data.map((item) => item.date);
-          var amounts = data.map((item) => parseFloat(item.total_amount));
+          const labels = data.map((item) => item.date);
+          const amounts = data.map((item) => parseFloat(item.total_amount));
 
-          // Add timestamp to the chart
-          var lastUpdated = new Date().toLocaleString();
-
-          var ctx = document
+          const ctx = document
             .getElementById("chartContainer-expenses")
             .getContext("2d");
 
-          if (chart) {
-            // If chart instance exists, update it
-            chart.data.labels = labels;
-            chart.data.datasets[0].data = amounts;
-            chart.options.plugins.title.text = `Last Updated: ${lastUpdated}`;
-            chart.update();
-          } else {
-            // Create a new chart instance
-            chart = new Chart(ctx, {
-              type: "line",
-              data: {
-                labels: labels,
-                datasets: [
-                  {
-                    label: "Daily Expenses",
-                    data: amounts,
-                    borderColor: "green",
-                    backgroundColor: "rgba(144, 238, 144, 0.4)",
-                    fill: true,
-                    tension: 0.3,
-                  },
-                ],
-              },
-              options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                  y: {
-                    beginAtZero: true,
-                  },
+          const chartConfig = {
+            type: "bar",
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: "Daily Expenses",
+                  data: amounts,
+                  backgroundColor: amounts.map((amount) =>
+                    createGradient(ctx, amount, Math.max(...amounts))
+                  ),
+                  borderColor: "transparent",
+                  borderWidth: 0,
+                  borderRadius: 6,
                 },
-                plugins: {
-                  title: {
-                    display: true,
-                    text: `Last Updated: ${lastUpdated}`, // Display the last updated time
-                  },
-                  tooltip: {
-                    callbacks: {
-                      label: function (context) {
-                        let label = context.dataset.label || "";
-                        if (label) {
-                          label += ": ";
-                        }
-                        if (context.parsed.y !== null) {
-                          label += context.parsed.y;
-                        }
-                        return label;
-                      },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                },
+              },
+              plugins: {
+                title: {
+                  display: true,
+                  text: `Last Updated: ${new Date().toLocaleString()}`, // Display last updated time
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      let label = context.dataset.label || "";
+                      if (label) {
+                        label += ": ";
+                      }
+                      if (context.parsed.y !== null) {
+                        label += context.parsed.y.toFixed(2); // Format amount
+                      }
+                      return label;
                     },
                   },
-                  legend: {
-                    display: true,
-                  },
                 },
-                layout: {
-                  padding: 20,
+                legend: {
+                  display: true,
                 },
               },
-            });
+              layout: {
+                padding: 20,
+              },
+            },
+          };
+
+          // Create or update the chart instance
+          if (chart) {
+            chart.data.labels = labels;
+            chart.data.datasets[0].data = amounts;
+            chart.update();
+          } else {
+            chart = new Chart(ctx, chartConfig);
           }
         } else {
           console.error("Unexpected data format:", data);
@@ -133,20 +143,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   // Load chart on page load
   loadChart();
-  console.log("chart Updated");
-});
+  // Show success function
+  function ShowSuccessExpenses() {
+    const successExpense = document.getElementById("successModalAddedExpenses");
+    successExpense.style.display = "block";
+  }
 
-function ShowSuccessExpenses() {
-  const successExpense = document.getElementById("successModalAddedExpenses");
-  successExpense.style.display = "block";
-}
+  function HideSuccessExpenses() {
+    const successExpense = document.getElementById("successModalAddedExpenses");
+    successExpense.style.display = "none";
+  }
 
-function HideSuccessExpenses() {
-  const successExpense = document.getElementById("successModalAddedExpenses");
-  successExpense.style.display = "none";
-}
-
-document.addEventListener("DOMContentLoaded", function () {
+  // Fetch total expenses count
   fetch("all_expenses.php")
     .then((response) => response.json())
     .then((data) => {
@@ -160,218 +168,379 @@ document.addEventListener("DOMContentLoaded", function () {
     .catch((error) => {
       console.error("Error fetching total expenses:", error);
     });
-});
 
-function countUp(elementId, duration) {
-  const element = document.getElementById(elementId);
-  const endValue = parseFloat(element.getAttribute("data-end-value"));
-  const startValue = 0;
-  const startTime = performance.now();
+  function countUp(elementId, duration) {
+    const element = document.getElementById(elementId);
+    const endValue = parseFloat(element.getAttribute("data-end-value"));
+    const startValue = 0;
+    const startTime = performance.now();
 
-  function updateCount(timestamp) {
-    const elapsed = timestamp - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const currentValue = Math.floor(
-      progress * (endValue - startValue) + startValue
-    );
-    element.textContent = currentValue.toLocaleString("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
+    function updateCount(timestamp) {
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const currentValue = Math.floor(
+        progress * (endValue - startValue) + startValue
+      );
+      element.textContent = currentValue.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
 
-    if (progress < 1) {
-      requestAnimationFrame(updateCount);
+      if (progress < 1) {
+        requestAnimationFrame(updateCount);
+      }
     }
+
+    requestAnimationFrame(updateCount);
   }
 
-  requestAnimationFrame(updateCount);
-}
-
-//=================GET ALL EXPENSES COUNT UP OF THE FOLLOWING ===================
-
-//========FETCCH TODAY MEMBERS ================
-document.addEventListener("DOMContentLoaded", function () {
-  // get the total members
+  // Fetch today's members and expenses
   fetch("../p/fetch_today_members.php")
     .then((response) => response.json())
     .then((data) => {
-      const memberCount = data.length > 0 ? data[0].count : 0;
+      // Fetch member count from the response
+      const memberCount =
+        data.length > 0 && data[0].count ? parseInt(data[0].count) : 0;
 
-      // Initialize the progress circle for total members
-      const progressBar = new ProgressBar.Circle("#progress-circle", {
-        color: "green",
-        strokeWidth: 30,
-        trailWidth: 30,
-        easing: "easeInOut",
-        duration: 1400,
-        text: {
-          value: "0%",
-        },
-        from: { color: "#4caf50", width: 30 },
-        to: { color: "#4caf50", width: 30 },
-        step: function (state, circle) {
-          circle.path.setAttribute("stroke", state.color);
-          circle.path.setAttribute("stroke-width", state.width);
-          const value = Math.round(circle.value() * 100);
-          circle.setText(value + "+");
-        },
-      });
+      // Display member count directly in the DOM
+      document.getElementById("daily-members-text").textContent = memberCount;
 
-      // Delay the progress bar animation
-      setTimeout(() => {
-        progressBar.animate(memberCount / 100); // Adjust 100 as needed
-      }, 500); // 500ms delay
+      // Counting animation for total members using CountUp.js
+      const countUp = new CountUp("daily-members-text", 0, memberCount, 0, 2);
+      if (!countUp.error) {
+        countUp.start(); // Start the counting animation
+      } else {
+        console.error(countUp.error); // Handle CountUp.js errors
+      }
 
-      // Counting animation for total members
-      const countUp = new CountUp("progress-text", 0, memberCount, 0, 2);
-      countUp.start();
+      // Calculate and display percentage change for daily members
+      const previousMemberCount = 50; // Replace with actual previous member count from your data source
+      let memberPercentageChange = 0;
+
+      if (previousMemberCount !== undefined && memberCount !== undefined) {
+        if (previousMemberCount === 0 && memberCount > 0) {
+          memberPercentageChange = 100; // Full increase from 0
+        } else if (previousMemberCount === 0 && memberCount === 0) {
+          memberPercentageChange = 0; // Both previous and current counts are 0
+        } else {
+          memberPercentageChange =
+            ((memberCount - previousMemberCount) / previousMemberCount) * 100;
+        }
+      }
+
+      const memberChangeElement = document.getElementById(
+        "daily-members-change"
+      );
+      const memberChangeSymbol = memberPercentageChange > 0 ? "↑" : "↓";
+      const memberChangeImage =
+        memberPercentageChange > 0
+          ? "../Assets/up-arrow.png"
+          : "../Assets/down-arrow.png"; // Images for arrows
+
+      // Determine the color and format the percentage display
+      let memberChangeColor =
+        memberPercentageChange > 0 ? "text-green" : "text-red "; // Change color based on increase or decrease
+      let memberFormattedPercentage = `${Math.abs(
+        memberPercentageChange
+      ).toFixed(2)}%`; // Absolute value for display
+
+      if (
+        memberChangeSymbol === "↓" &&
+        memberCount === 0 &&
+        previousMemberCount === 0
+      ) {
+        memberFormattedPercentage = "0%"; // Show 0% if both are 0
+      }
+
+      if (memberChangeSymbol === "↑" && memberCount > 0) {
+        memberFormattedPercentage = `+${memberFormattedPercentage}`; // Show positive percentage for increase
+      } else {
+        memberFormattedPercentage = `-${memberFormattedPercentage}`; // Show negative percentage for decrease
+      }
+
+      // Set the percentage change HTML for daily members
+      memberChangeElement.innerHTML = `
+    <span class="${memberChangeColor}">${memberFormattedPercentage}</span>
+    <img src="${memberChangeImage}" alt="${memberChangeSymbol}" class="w-4 h-4 ml-1" />
+  `;
     })
     .catch((error) => {
-      console.error("Error fetching member data:", error);
+      console.error("Error fetching member data:", error); // Handle fetch errors
     });
 
-  // Fetch and display today's renewed members
-  fetch("renewed_select.php") // Ensure this PHP script returns today's renewed members count
+  // Fetch today's renewed members
+  fetch("../p/renewed_select.php") // Ensure this PHP script returns today's renewed members count
     .then((response) => response.json())
     .then((data) => {
       if (data.today_sales !== undefined) {
         const todayRenewedMembers = data.today_sales;
 
-        // Initialize the progress circle for today's renewed members intialzing for the new members
-        // with the following terms of the progres chart
-        const todayRenewedProgressBar = new ProgressBar.Circle(
-          "#today-renewed-progress-circle",
-          {
-            color: "green",
-            strokeWidth: 30,
-            trailWidth: 30,
-            easing: "easeInOut",
-            duration: 1400,
-            text: {
-              value: "0%",
-            },
-            from: { color: "#4caf50", width: 30 },
-            to: { color: "#4caf50", width: 30 },
-            step: function (state, circle) {
-              circle.path.setAttribute("stroke", state.color);
-              circle.path.setAttribute("stroke-width", state.width);
-              const value = Math.round(circle.value() * 100);
-              circle.setText(value + "+");
-            },
-          }
-        );
-
-        // Delay the progress bar animation
-        setTimeout(() => {
-          todayRenewedProgressBar.animate(todayRenewedMembers / 100); // Adjust 100 as needed
-        }, 1000); // 500ms delay
+        // Display renewed members count directly in the DOM
+        document.getElementById("today-renewed-members-text").textContent =
+          todayRenewedMembers;
 
         // Counting animation for today's renewed members
         const countUpRenewed = new CountUp(
-          "today-renewed-progress-text",
+          "today-renewed-members-text",
           0,
           todayRenewedMembers,
           0,
           2
         );
         countUpRenewed.start();
+
+        // Calculate and display percentage change for renewed members
+        const previousRenewedMembers = 20; // Replace with actual previous renewed count from your data source
+        let renewedPercentageChange = 0;
+
+        if (
+          previousRenewedMembers !== undefined &&
+          todayRenewedMembers !== undefined
+        ) {
+          if (previousRenewedMembers === 0 && todayRenewedMembers > 0) {
+            renewedPercentageChange = 100; // Full increase from 0
+          } else if (
+            previousRenewedMembers === 0 &&
+            todayRenewedMembers === 0
+          ) {
+            renewedPercentageChange = 0; // Both previous and current counts are 0
+          } else {
+            renewedPercentageChange =
+              ((todayRenewedMembers - previousRenewedMembers) /
+                previousRenewedMembers) *
+              100;
+          }
+        }
+
+        const renewedChangeElement = document.getElementById(
+          "renewed-members-change"
+        );
+        const renewedChangeSymbol = renewedPercentageChange > 0 ? "↑" : "↓";
+        const renewedChangeImage =
+          renewedPercentageChange > 0
+            ? "../Assets/up-arrow.png"
+            : "../Assets/down-arrow.png"; // Images for arrows
+
+        // Determine the color and format the percentage display
+        let renewedChangeColor =
+          renewedPercentageChange > 0 ? "text-green" : "text-red"; // Change color based on increase or decrease
+        let renewedFormattedPercentage = `${Math.abs(
+          renewedPercentageChange
+        ).toFixed(2)}%`; // Absolute value for display
+
+        if (
+          renewedChangeSymbol === "↓" &&
+          todayRenewedMembers === 0 &&
+          previousRenewedMembers === 0
+        ) {
+          renewedFormattedPercentage = "0%"; // Show 0% if both are 0
+        }
+
+        if (renewedChangeSymbol === "↑" && todayRenewedMembers > 0) {
+          renewedFormattedPercentage = `+${renewedFormattedPercentage}`; // Show positive percentage for increase
+        } else {
+          renewedFormattedPercentage = `-${renewedFormattedPercentage}`; // Show negative percentage for decrease
+        }
+
+        // Set the percentage change HTML for renewed members
+        renewedChangeElement.innerHTML = `
+      <span class="${renewedChangeColor}">${renewedFormattedPercentage}</span>
+      <img src="${renewedChangeImage}" alt="${renewedChangeSymbol}" class="w-4 h-4 ml-1" />
+    `;
       } else {
         console.error("Error fetching data:", data.error);
       }
-    });
-  // Fetch expenses data
-  fetch("../p/progress_expenses.php")
-    .then((response) => response.json())
-    .then((data) => {
-      const todayExpenses = data.today.total_amount || 0;
-      const yesterdayExpenses = data.yesterday.total_amount || 0;
-
-      // Calculate percentage
-      const percentageExpenses =
-        yesterdayExpenses > 0 ? todayExpenses / yesterdayExpenses : 1; // Avoid division by zero
-
-      // Initialize the progress circle for expenses
-      const expensesProgressBar = new ProgressBar.Circle(
-        "#expenses-progress-circle",
-        {
-          color: "red",
-          strokeWidth: 30,
-          trailWidth: 30,
-          easing: "easeInOut",
-          duration: 1400,
-          text: {
-            value: "0%",
-          },
-          from: { color: "#f44336", width: 30 },
-          to: { color: "#f44336", width: 30 },
-          step: function (state, circle) {
-            circle.path.setAttribute("stroke", state.color);
-            circle.path.setAttribute("stroke-width", state.width);
-            const value = Math.round(circle.value() * 100);
-            circle.setText(value + "%");
-          },
-        }
-      );
-
-      // Delay the progress bar animation
-      setTimeout(() => {
-        expensesProgressBar.animate(percentageExpenses); // Percentage relative to yesterday
-      }, 1500); // 1500ms delay
-
-      // Always animate to 95% to leave space
-      setTimeout(() => {
-        expensesProgressBar.animate(0.95, {
-          // Animate to 95% instead of 100%
-          duration: 2000, // Adjust duration for the color animation
-          easing: "easeInOut",
-        });
-      }, 3000); // Start the color animation after initial load
-
-      // Counting animation for expenses
-      const countUpExpenses = new CountUp(
-        "expenses-progress-text",
-        0,
-        todayExpenses,
-        0,
-        2
-      );
-      countUpExpenses.start();
     })
-    .catch((error) => console.error("Fetch error:", error));
+    .catch((error) => {
+      console.error("Error fetching renewed member data:", error); // Handle fetch errors
+    });
 });
 
-//================CALENDAR JS ===========
+function loadExpenses() {
+  // Fetch all expenses initially without any filters
+  fetch("../p/get_expenses_list.php")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok: " + response.statusText);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Fetched expenses:", data);
+      allExpenses = data; // Store all expenses globally
+      applyFilters(); // Apply filters after loading the data
+    })
+    .catch((error) => {
+      console.error("Error loading expenses:", error);
+    });
+}
 
-document.addEventListener("DOMContentLoaded", () => {
-  const today = new Date();
-  const dayOfWeek = today.getDay(); // 0 (Sunday) to 6 (Saturday)
+function applyFilters() {
+  const selectedDate = document.getElementById("startDate").value; // Treat this as the exact date
+  const staffName = document.getElementById("staffName").value.toLowerCase();
 
-  // Update the last updated date
-  const lastUpdatedElement = document.getElementById("lastUpdated");
-  lastUpdatedElement.textContent = `${
-    today.getMonth() + 1
-  }/${today.getDate()}/${today.getFullYear()}`;
+  // Filter expenses based on the input values
+  let filteredExpenses = allExpenses;
 
-  // Reference to the calendar carousel
-  const calendarCarousel = document.querySelector(".calendar-carousel");
+  if (selectedDate) {
+    filteredExpenses = filteredExpenses.filter(
+      (expense) =>
+        new Date(expense.date).toLocaleDateString() ===
+        new Date(selectedDate).toLocaleDateString()
+    );
+  }
 
-  // Days of the week in order, where index 0 is Sunday
-  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  if (staffName) {
+    filteredExpenses = filteredExpenses.filter((expense) =>
+      (expense.full_name || "").toLowerCase().includes(staffName)
+    );
+  }
 
-  // Clear any existing calendar days
-  calendarCarousel.innerHTML = "";
+  // Update the table with the filtered expenses
+  const tableBody = document.querySelector("#expenseTable tbody");
+  tableBody.innerHTML = "";
 
-  // Create and append day elements
-  daysOfWeek.forEach((day, index) => {
-    const dayElement = document.createElement("div");
-    dayElement.classList.add("calendar-day");
-    dayElement.textContent = day;
+  if (filteredExpenses.length > 0) {
+    filteredExpenses.forEach((expense) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td class="border border-gray-300 px-4 py-2">${expense.date}</td>
+        <td class="border border-gray-300 px-4 py-2">
+          ${
+            expense.image
+              ? `<img src="${expense.image}" alt="Expense Image" class="h-12 w-12" style="max-width:50px; max-height:50px; width:auto; height:auto;"/>`
+              : "No Image"
+          }
+        </td>
+        <td class="border border-gray-300 px-4 py-2">${expense.description}</td>
+        <td class="border border-gray-300 px-4 py-2">${expense.type}</td>
+        <td class="border border-gray-300 px-4 py-2">${
+          expense.supplier || "N/A"
+        }</td>
+        <td class="border border-gray-300 px-4 py-2" style="white-space:nowrap"> P ${parseFloat(
+          expense.amount
+        ).toFixed(2)}</td>
+        <td class="border border-gray-300 px-4 py-2">${expense.full_name}</td>
+        <td class="border border-gray-300 px-4 py-2">
+          <div class="flex">
+            <img src="../Assets/view_expense.png" style='cursor:pointer; margin-right:6px; width:40px; height:40px;' onclick="ViewDetails(${JSON.stringify(
+              expense
+            ).replace(/"/g, "&quot;")})">
+            <img src="../Assets/delete_icon.png" style='cursor:pointer;width:35px; height:35px;' onclick="deleteExpense(${
+              expense.id
+            })" class="text-red-600 hover:text-red-800"></img>
+          </div>
+        </td>
+      `;
+      tableBody.appendChild(row);
+    });
+  } else {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td colspan="8" class="border border-gray-300 px-4 py-2 text-center">No expenses found.</td>`;
+    tableBody.appendChild(row);
+  }
+}
 
-    // Set the active class for the current day
-    if (index === dayOfWeek) {
-      dayElement.classList.add("active");
-    }
+// Clear Filters Function
+function clearFilters() {
+  // Reset the input fields
+  document.getElementById("startDate").value = "";
+  document.getElementById("staffName").value = "";
 
-    calendarCarousel.appendChild(dayElement);
-  });
-});
+  // Reload all expenses (without filters)
+  loadExpenses();
+}
+
+// Attach the filter function to the button click
+document.querySelector("button").addEventListener("click", applyFilters);
+
+// Function to open the password verification modal
+function openVerifyPasswordModal(id) {
+  // Store the expense ID in a variable accessible in confirmDelete
+  window.expenseToDelete = id;
+  document.getElementById("modal-verify-password").style.display = "block";
+  document.getElementById("error-message").style.display = "none"; // Hide error message initially
+}
+
+// Function to close the password verification modal
+function closeVerifyModal() {
+  document.getElementById("modal-verify-password").style.display = "none";
+  document.getElementById("verification-password").value = ""; // Clear the password field
+  document.getElementById("error-message").style.display = "none"; // Hide error message
+}
+
+// Function to confirm deletion after verifying the password
+function confirmDelete() {
+  const password = document.getElementById("verification-password").value;
+  if (password) {
+    // Verify the password first
+    fetch(`../p/verify_delete_expense.php`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ password }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          // If password is correct, directly delete the expense
+          fetch(`../p/delete_expense.php?id=${window.expenseToDelete}`, {
+            method: "POST", // Change to POST
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert("Expense deleted successfully.");
+                loadExpenses(); // Refresh the expense list
+                closeVerifyModal(); // Close the verification modal
+              } else {
+                alert("Error deleting expense: " + data.message);
+              }
+            })
+            .catch((error) => {
+              console.error("Error deleting expense:", error);
+              alert("An error occurred while deleting the expense.");
+            });
+        } else {
+          // Show error message below the input
+          document.getElementById("error-message").style.display = "block";
+        }
+      })
+      .catch((error) => {
+        console.error("Error verifying password:", error);
+      });
+  }
+}
+
+// Function to trigger the deletion process
+function deleteExpense(id) {
+  openVerifyPasswordModal(id);
+}
+
+// Load expenses on page load
+document.addEventListener("DOMContentLoaded", loadExpenses);
+
+//================View EXPENSE DETAILS =========
+function ViewDetails(expense) {
+  // Populate modal fields
+  document.getElementById("modalTitle").innerText = expense.description;
+  document.getElementById("modalDate").innerText = `Date: ${expense.date}`;
+  document.getElementById("modalType").innerText = `Type: ${expense.type}`;
+  document.getElementById("modalSupplier").innerText = `Supplier: ${
+    expense.supplier || "N/A"
+  }`;
+  document.getElementById("modalAmount").innerText = `Amount: P ${parseFloat(
+    expense.amount
+  ).toFixed(2)}`;
+  document.getElementById("modalImage").src = expense.image;
+
+  // Show the modal
+  document.getElementById("modal-view-expense1").style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("modal-view-expense1").style.display = "none";
+}
+
+//============Load daily expenses data

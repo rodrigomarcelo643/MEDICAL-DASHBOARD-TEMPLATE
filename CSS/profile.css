@@ -71,7 +71,9 @@
 .custom-file-upload input[type="file"] {
   display: none;
 }
-
+label {
+  overflow: hidden;
+}
 .form-input {
   padding: 10px;
   border: 1px solid #ddd;

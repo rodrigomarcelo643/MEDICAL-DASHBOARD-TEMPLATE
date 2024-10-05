@@ -10,7 +10,7 @@
 
         $hashedPassword = password_hash($staffPassword, PASSWORD_BCRYPT);
 
-        $stmt = $conn->prepare("INSERT INTO AddStaff (first_name, last_name, staffUsername, staffPassword, staffEmail) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO addstaff (first_name, last_name, staffUsername, staffPassword, staffEmail) VALUES (?, ?, ?, ?, ?)");
 
         $stmt->bind_param("sssss", $staffFirstName, $staffLastName, $staffUsername, $hashedPassword, $staffEmail);
 

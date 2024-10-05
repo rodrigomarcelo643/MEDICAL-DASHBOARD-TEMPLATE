@@ -242,7 +242,9 @@
   border-top: 2px solid green;
   border-bottom: 2px solid green;
 }
-
+label {
+  overflow: hidden;
+}
 /* Financial Overview */
 .financial-overview {
   display: flex;
@@ -252,14 +254,14 @@
 }
 
 .financial-box {
-  flex: 1 1 calc(33.333% - 16px);
+  flex: 1 1 calc(20.333% - 100px);
   background-color: white;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
   border: 2px solid rgb(216, 210, 210);
   text-align: center;
-  min-width: 250px;
+  min-width: 150px;
   align-content: center;
 }
 .Daily-Reports {
@@ -275,17 +277,18 @@
   width: 20%;
   height: 50px;
   align-content: center;
-  background-color: rgb(14, 110, 14);
+  background-color: #009b7b;
   font-weight: bold;
   color: white;
   letter-spacing: 0.5px;
   font-size: 18px;
   border-radius: 15px;
   margin-bottom: 25px;
+  margin-top: -50px;
 }
 
 .submitReport:hover {
-  background-color: rgb(16, 170, 16);
+  background-color: #61ddc4;
   transition: 0.5s;
 }
 .financial-box h3 {
@@ -389,4 +392,14 @@
 
 .chart-container canvas {
   max-width: 100%;
+}
+.progress-bar {
+  width: 100%; /* Full width */
+  height: 20px; /* Adjust height as needed */
+  background-color: gray; /* Default background color */
+  transition: background-color 0.3s; /* Smooth transition */
+}
+
+.progress-bar.up {
+  background-color: red; /* Background when arrow is up */
 }

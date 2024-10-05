@@ -83,7 +83,6 @@ if (!isset($_GET['token'])) {
     <link href="../CSS/reset_password.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
-    /* General styles for error overlays */
     .overlay {
         display: none;
         position: fixed;
@@ -99,10 +98,10 @@ if (!isset($_GET['token'])) {
         animation: fadeIn 0.5s;
     }
 
-    /* Content of the overlay */
     .overlay-content {
         background: #fff;
         padding: 20px;
+
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
         text-align: center;
         width: 100%;
@@ -110,32 +109,27 @@ if (!isset($_GET['token'])) {
         animation: slideIn 0.5s;
     }
 
-    /* Success icon styling */
     .overlay-content .icon {
         width: 80px;
         height: 80px;
         margin-bottom: 15px;
     }
 
-    /* Heading styles for the overlay */
     .overlay-content h1 {
         font-size: 1.5rem;
         margin-bottom: 15px;
         font-weight: bold;
     }
 
-    /* Error styles for the overlay */
     .invalid-request-content {
         color: #d9534f;
-        /* Bootstrap Danger color */
     }
 
     .expired-token-content {
         color: #f0ad4e;
-        /* Bootstrap Warning color */
+
     }
 
-    /* Animation for fading in */
     @keyframes fadeIn {
         from {
             opacity: 0;
@@ -146,7 +140,6 @@ if (!isset($_GET['token'])) {
         }
     }
 
-    /* Animation for sliding in */
     @keyframes slideIn {
         from {
             transform: translateY(-20px);
@@ -159,7 +152,6 @@ if (!isset($_GET['token'])) {
         }
     }
 
-    /* Button styling */
     .btn-primary {
         background-color: green;
         color: #fff;
@@ -173,7 +165,7 @@ if (!isset($_GET['token'])) {
 
     .btn-primary:hover {
         background-color: lightgreen;
-        color: black;
+        color: white;
     }
 
     #spinnerOverlay2 {
@@ -182,58 +174,52 @@ if (!isset($_GET['token'])) {
         left: 0;
         width: 100%;
         height: 100%;
-        background: black;
+        background: rgba(255, 255, 255, 0.384);
         display: flex;
         justify-content: center;
         align-items: center;
         z-index: 1000;
         display: none;
     }
-
-    #spinnerOverlay2 img {
-        width: 150px;
-    }
     </style>
 </head>
-
-<body>
-    <div id="spinnerOverlay2">
-        <div class="spinner-content2">
-            <div class="flex" style="margin-bottom:-35px;margin-top:10px;">
-                <h1 class="text-green-500 font-bold " style="margin-top:6px;color:green;font-weight:bold">
-                    Redirecting......
-                </h1>
-            </div>
-            <div>
-                <img src="../Assets/loading_L.gif" alt="Loading" class="loading-gif">
-            </div>
+<div id="spinnerOverlay2">
+    <div class="spinner-content2">
+        <div class="flex" style="margin-bottom:-35px;margin-top:10px;">
+            <img src="../Assets/success_message.png" alt="Success" class="success-message"
+                style="width:30px;height:30px;margin-top:2px;">
+            <h1 class="text-green-500 font-bold " style="margin-top:6px;color:green;font-weight:bold">
+                Password Updated
+                Successfully
+            </h1>
+        </div>
+        <div>
+            <img src="../Assets/loading_L.gif" alt="Loading" class="loading-gif">
         </div>
     </div>
+</div>
 
+<body>
     <?php if (isset($errorType)): ?>
     <div class="overlay">
-        <div class="overlay-content <?php echo htmlspecialchars($errorType); ?>-content">
+        <div class="overlay-content <?php echo $errorType; ?>-content">
             <div class="flex text-center justify-center align-center">
-                <img src="../Assets/404_ERROR.gif" style="width:20%;height:20%">
+                <img src="../Assets/404_ERROR.gif" style="width:30%;height:20%">
             </div>
-            <h1 style="color:red;font-weight:bold;letter-spacing:.5px;">
-                <?php echo ($errorType === 'invalidRequest') ? 'Invalid Request' : 'Token Expired'; ?>
-            </h1>
-            <p style="color:red;font-weight:bold;letter-spacing:.5px;"><?php echo htmlspecialchars($errorMessage); ?>
-            </p>
-            <button onclick="ForgotRedirect()" class="btn-primary">Proceed</button>
+            <h1><?php echo ($errorType === 'invalidRequest') ? 'Invalid Request' : 'Token Expired'; ?></h1>
+            <p><?php echo htmlspecialchars($errorMessage); ?></p>
+            <button onclick="ForgotRedirect()" class="btn-primary" style="background-color:#009b7b">Proceed</button>
         </div>
     </div>
     <script>
     document.querySelector('.overlay').style.display = 'flex';
 
     function ForgotRedirect() {
-        document.querySelector('.overlay').style.display = 'none';
         setTimeout(function() {
             document.getElementById('spinnerOverlay2').style.display = 'flex';
             setTimeout(function() {
                 window.location.href = "sF.php";
-            }, 6000);
+            }, 4000);
         }, 10);
     }
     </script>
@@ -258,7 +244,8 @@ if (!isset($_GET['token'])) {
                         <img src="../Assets/success_message.png" alt="Success" class="success-message"
                             style="width:30px;height:30px;margin-top:2px;">
                         <h1 class="text-green-500 font-bold " style="margin-top:6px;color:green;font-weight:bold">
-                            Password Updated Successfully
+                            Password Updated
+                            Successfully
                         </h1>
                     </div>
                     <div>
@@ -270,12 +257,31 @@ if (!isset($_GET['token'])) {
             setTimeout(function() {
                 document.getElementById('spinnerOverlay').style.display = 'flex';
                 setTimeout(function() {
-                    window.location.href = "<?php echo htmlspecialchars($redirect); ?>";
+                    window.location.href = "<?php echo $redirect; ?>";
                 }, 4000);
             }, 10);
             </script>
             <?php endif; ?>
             <?php endif; ?>
+
+            <form method="post" action="">
+                <div class="grid gap-y-4">
+                    <div style="margin-bottom:25px!important;">
+                        <label for="password" class="block mb-2 text-xs font-semibold">New Password</label>
+                        <input type="password" id="password" name="password"
+                            class="block w-full px-4 py-3 text-sm border-2 border-gray-200 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                            required placeholder="Enter your new password">
+                    </div>
+                    <div style="margin-bottom:25px!important;">
+                        <label for="confirm_password" class="block mb-2 text-xs font-semibold">Confirm Password</label>
+                        <input type="password" id="confirm_password" name="confirm_password"
+                            class="block w-full px-4 py-3 text-sm border-2 border-gray-200 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                            required placeholder="Confirm your new password">
+                    </div>
+                    <button type="submit" id="resetBtn" class="btn-primary" style="background-color:#009b7b">Reset
+                        Password</button>
+                </div>
+            </form>
         </div>
     </section>
 </body>

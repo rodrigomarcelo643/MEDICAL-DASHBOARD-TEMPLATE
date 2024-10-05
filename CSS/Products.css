@@ -1,7 +1,7 @@
 .AddProduct {
   width: 230px;
   height: 52px;
-  background-color: #7eea6c;
+  background-color: #009b7b;
   border-radius: 15px;
   align-content: center;
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
@@ -11,7 +11,7 @@
   cursor: pointer;
 }
 .AddProduct:hover {
-  background-color: #246b18;
+  background-color: #2de4bf;
   color: white;
   transition: 0.5s;
 }
@@ -38,9 +38,8 @@ table {
   font-family: Arial, sans-serif;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6);
 }
-
-thead {
-  background-color: #f9f9f9;
+td {
+  border: 2px transparent !important;
 }
 
 th,
@@ -70,10 +69,6 @@ tbody tr:hover {
   border: 1.3px solid rgb(150, 147, 147);
   border-radius: 13px;
 }
-tr {
-  border-bottom: 3px solid green;
-}
-/* From Uiverse.io by vinodjangid07 */
 .edit {
   width: 30px;
   height: 30px;
@@ -128,7 +123,7 @@ tr {
   width: 35px;
   height: 35px;
   border-radius: 50%;
-  background-color: rgb(6, 75, 10);
+  background-color: #009b7b;
   border: none;
   font-weight: 600;
   display: flex;
@@ -190,13 +185,12 @@ tr {
   tr {
     margin-bottom: 10px;
     display: block;
-    border-bottom: 5px solid green;
   }
 
   td {
     display: flex;
     justify-content: space-between;
-    border-bottom: 5px solid green;
+
     position: relative;
     padding-left: 50%;
     text-align: right;
@@ -269,7 +263,7 @@ tr {
 .AddProduct {
   width: 230px;
   height: 52px;
-  background-color: #7eea6c;
+  background-color: #009b7b;
   border-radius: 15px;
   align-content: center;
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
@@ -279,7 +273,7 @@ tr {
   cursor: pointer;
 }
 .AddProduct:hover {
-  background-color: #246b18;
+  background-color: #4deccc;
   color: white;
   transition: 0.5s;
 }
@@ -304,13 +298,14 @@ tr {
 
 table {
   width: 100%;
+  border-radius: 50px !important;
   border-collapse: collapse;
   font-family: Arial, sans-serif;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6);
 }
 
 thead {
-  background-color: #f9f9f9;
+  background-color: #ffffff;
 }
 
 th,
@@ -324,9 +319,16 @@ th {
   background-color: #ffffff;
   font-weight: bold;
 }
-
+thead {
+  height: 70px;
+  color: #687588;
+  background-color: #e7e4e4 !important;
+}
 tbody tr:nth-child(even) {
   background-color: #ffffff;
+}
+tbody tr:nth-child(odd) {
+  background-color: #ccf3cc88;
 }
 
 tbody tr:hover {
@@ -339,9 +341,6 @@ tbody tr:hover {
   box-shadow: 4px 4px 4px rgba(58, 57, 57, 0.6);
   border: 1.3px solid rgb(150, 147, 147);
   border-radius: 13px;
-}
-tr {
-  border-bottom: 3px solid green;
 }
 
 /* Responsive Design */
@@ -375,13 +374,12 @@ tr {
   tr {
     margin-bottom: 10px;
     display: block;
-    border-bottom: 5px solid green;
   }
 
   td {
     display: flex;
     justify-content: space-between;
-    border-bottom: 5px solid green;
+
     position: relative;
     padding-left: 50%;
     text-align: right;
@@ -458,7 +456,7 @@ tr {
 
 .upload-file-button {
   display: inline-block;
-  background-color: #5cda13;
+  background-color: #009b7b;
   color: #000000;
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
@@ -477,13 +475,13 @@ tr {
 }
 
 .upload-file-button:hover {
-  background-color: #098805;
+  background-color: #009b7b;
 }
 
 /* Full-width button styling */
 .full-width-button {
   width: 100%;
-  background-color: #197024;
+  background-color: #009b7b;
   color: black;
   padding: 12px 20px;
   border: none;
@@ -499,21 +497,19 @@ tr {
 }
 
 .full-width-button:hover {
-  background-color: #1dc547f3;
+  background-color: #59c7b1;
   transition: 0.5s;
   transform: translateY(-1px);
   box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
 }
-/* Base styles for the input container */
 .input-container {
   position: relative;
   margin-bottom: 20px;
 }
 
-/* Label styles */
 .input-container label {
   position: absolute;
-  top: 45%;
+  top: 35%;
   left: 10px;
   transition: all 0.3s ease;
   pointer-events: none;
@@ -525,31 +521,28 @@ tr {
   letter-spacing: 0.7px;
 }
 
-/* Kung ang input mo move pababaw */
 .input-container input:not(:placeholder-shown) + label,
 .input-container input:focus + label {
-  top: -5px;
-  left: 5px;
-  font-size: 0.85rem;
-  color: #37ad51;
+  top: 3px;
+  left: 10px;
+  font-size: 0.65rem;
+  color: #009b7b;
   margin-top: 0px;
   z-index: 999;
 }
 
 /* Input styles */
 .input-container input {
-  border-bottom: 2px solid gray;
+  border: 2px solid #009b7b;
   padding: 12px 10px 0px 10px;
   width: 100%;
   height: 60px;
+  border-radius: 10px;
   box-sizing: border-box;
   font-size: 1rem;
   outline: none;
 }
 
-.input-container input:focus {
-  border-bottom-color: #31ce4b;
-}
 /*Show Animation of the add product*/
 /* styles.css */
 .product {
@@ -602,7 +595,6 @@ tr {
   text-align: center;
   animation: slideIn 0.5s;
 }
-/* Modal header */
 .modal-header {
   display: flex !important;
   align-items: center;
@@ -610,15 +602,12 @@ tr {
   flex-direction: column;
 }
 
-/* Success icon */
 .success-icon {
   width: 30px;
   height: 30px;
   margin-bottom: 20px;
   animation: bounce 1s infinite;
 }
-
-/* Success message */
 .success-message {
   font-size: 15px;
   color: #ffffff;
@@ -774,9 +763,9 @@ td {
 .custom-swal-container {
   overflow: hidden !important;
 }
-
-/*Product Documents*/
-/* From Uiverse.io by vinodjangid07 */
+label {
+  overflow: hidden;
+}
 .Documents-btn {
   display: flex;
   align-items: center;
@@ -786,7 +775,7 @@ td {
   border: none;
   padding: 0px 15px;
   border-radius: 5px;
-  background-color: rgb(12, 36, 14);
+  background-color: #009b7b;
   gap: 10px;
   cursor: pointer;
   transition: all 0.3s;
@@ -831,7 +820,7 @@ td {
   transform: translateY(-5px);
 }
 .Documents-btn:hover {
-  background-color: rgb(58, 94, 66);
+  background-color: #72e7d0;
 }
 .Documents-btn:active {
   transform: scale(0.95);

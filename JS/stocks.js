@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const changeAmounts = data.map((entry) => entry.change_amount);
       console.log("Chart Has been Displayed ");
       const ctx = document.getElementById("stockHistoryChart").getContext("2d");
-      new Chart(ctx, {  
+      new Chart(ctx, {
         type: "line",
         data: {
           labels: labels,
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document
     .getElementById("viewStockHistory")
     .addEventListener("click", function () {
-      fetch("fetch_stock_history.php")
+      fetch("../p/fetch_stock_history.php")
         .then((response) => response.json())
         .then((data) => {
           const historyContainer = document.getElementById("historyContainer");

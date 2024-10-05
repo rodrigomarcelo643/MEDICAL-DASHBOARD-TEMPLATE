@@ -40,6 +40,7 @@ if ($result->num_rows > 0) {
             }
         }
 
+        
         $members[] = [
             'id' => $row['id'],
             'first_name' => $row['first_name'],
@@ -53,4 +54,7 @@ if ($result->num_rows > 0) {
 }
 
 $conn->close();
+
+
+
 ?>

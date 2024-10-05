@@ -1,18 +1,5 @@
 <?php
-// Database connection parameters
-$host = 'localhost'; // Adjust as necessary
-$dbname = 'gym'; // Adjust as necessary
-$username = 'root'; // Adjust as necessary
-$password = ''; // Adjust as necessary
-
-// Create a new PDO instance
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo json_encode(['status' => 'error', 'message' => 'Database connection failed: ' . $e->getMessage()]);
-    exit;
-}
+include 'connection.php'; // Ensure this file establishes a MySQLi connection using `$conn`
 
 // Fetch POST data
 $data = $_POST;
@@ -28,38 +15,50 @@ if (!is_array($items)) {
 }
 
 try {
-    // Begin a transaction
-    $pdo->beginTransaction();
+    // Begin transaction
+    $conn->begin_transaction();
 
     // Prepare the SQL statement
-    $stmt = $pdo->prepare("
+    $stmt = $conn->prepare("
         INSERT INTO cart_items (member_id, product_id, product_name, quantity, price, total)
-        VALUES (:member_id, :product_id, :product_name, :quantity, :price, :total)
+        VALUES (?, ?, ?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE
             quantity = VALUES(quantity),
             price = VALUES(price),
             total = VALUES(total)
     ");
 
-    // Execute the prepared statement for each item
+    if (!$stmt) {
+        throw new Exception("Prepare failed: " . $conn->error);
+    }
+
+    // Bind parameters: "i" for integer, "d" for double, "s" for string
     foreach ($items as $item) {
-        $stmt->execute([
-            ':member_id' => $memberId,
-            ':product_id' => intval($item['product_id']),
-            ':product_name' => $item['product_name'],
-            ':quantity' => intval($item['quantity']),
-            ':price' => floatval($item['price']),
-            ':total' => floatval($item['total']),
-        ]);
+        $productId = intval($item['product_id']);
+        $productName = $item['product_name'];
+        $quantity = intval($item['quantity']);
+        $price = floatval($item['price']);
+        $total = floatval($item['total']);
+
+        // Bind values
+        $stmt->bind_param("iisdid", $memberId, $productId, $productName, $quantity, $price, $total);
+
+        // Execute the prepared statement
+        if (!$stmt->execute()) {
+            throw new Exception("Execute failed: " . $stmt->error);
+        }
     }
 
     // Commit the transaction
-    $pdo->commit();
+    $conn->commit();
 
     echo json_encode(['status' => 'success']);
-} catch (PDOException $e) {
+} catch (Exception $e) {
     // Rollback the transaction on error
-    $pdo->rollBack();
+    $conn->rollback();
     echo json_encode(['status' => 'error', 'message' => 'Failed to update cart: ' . $e->getMessage()]);
+} finally {
+    $stmt->close();
+    $conn->close();
 }
 ?>

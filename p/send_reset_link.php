@@ -88,7 +88,7 @@ function sendVerificationEmail($email, $encodedEmail) {
             <h1>Yokoks Gym</h1>
             <p>It looks like you’ve requested a password reset. We’re here to help you get back on track.</p>
             <p>Click the button below to reset your password:</p>
-            <a href="http://localhost:8000/p/reset_password.php?token=' . $token . '" class="button">Reset Password</a>
+            <a href="https://lemonchiffon-ape-979463.hostingersite.com/p/reset_password.php?token=' . $token . '" class="button">Reset Password</a>
             <p class="footer">If you did not request a password reset, please ignore this email. Your account is safe with us!</p>
         </div>
     </body>

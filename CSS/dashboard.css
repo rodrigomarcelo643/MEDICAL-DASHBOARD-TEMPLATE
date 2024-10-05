@@ -1,9 +1,12 @@
 * {
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: "Poppins";
   overflow-x: hidden;
 }
+label {
+  overflow: hidden;
+}
 body {
-  background-color: #e3ebe036 !important;
+  background-color: #edf0f2 !important;
 }
 .percentage-border-expenses {
   /* Default border styles */
@@ -76,11 +79,11 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 160px;
   position: relative;
 }
 
 .sidebar {
-  box-shadow: rgba(0, 0, 0, 0.5);
   width: 200px;
   background-color: white;
 }
@@ -103,13 +106,7 @@ body {
   margin-left: -25px;
   margin-top: -20px;
 }
-.shadow-custom {
-  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
-  padding: 10px;
-  width: 500px;
-  height: 50px;
-  position: relative;
-}
+
 .box-shadow {
   box-shadow: 1px 4px 1px rgba(0, 0, 0, 0.2) !important;
 }
@@ -141,7 +138,7 @@ body {
 
 .content {
   margin-top: 60px;
-  margin-left: 230px;
+  margin-left: 220px;
 }
 
 .notif {
@@ -202,7 +199,6 @@ body {
 
 .sidebar {
   z-index: 999;
-  box-shadow: 2px 2px 2px rgba(95, 93, 93, 0.5);
 }
 .sidebar-icon {
   width: 50px;
@@ -214,7 +210,7 @@ body {
   margin-left: 5px;
 }
 .sidebar-item {
-  color: #0a0a0a;
+  color: #737791;
   padding: 13px;
   margin-bottom: 5px;
   letter-spacing: 1.5px;
@@ -222,15 +218,15 @@ body {
 }
 .sidebar-item:hover {
   background-color: #ffffff;
-  border: 2px solid green;
-  color: green;
+  border: 2px solid #009b7b;
+  color: #009b7b;
   transition: 0.5s;
 }
 .sidebar-item.bg-green-500 {
-  background-color: #ffffff;
+  background-color: #009b7b;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-  border: 2px solid green;
-  color: green !important;
+
+  color: white !important;
   letter-spacing: 1.5px;
 }
 .sidebar-item.text-black {
@@ -239,7 +235,12 @@ body {
 }
 .logo-move {
   margin-bottom: 40px;
-  margin-top: 25px;
+  margin-top: 10px;
+  align-content: center;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Styles for the modal */
@@ -454,7 +455,8 @@ body {
 /*==================Boxes Reports*/
 @media only screen and (min-width: 300px) and (max-width: 1020px) {
   .content {
-    margin-left: 20px;
+    position: relative;
+    left: 0 !important;
   }
   .sidebar {
     z-index: 999;

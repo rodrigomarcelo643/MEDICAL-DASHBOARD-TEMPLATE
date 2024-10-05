@@ -49,14 +49,14 @@ body {
 
 .text-overlay {
   position: absolute;
-  top: 50%;
+  top: 56%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
   color: white;
   padding: 1rem;
   max-width: 80% !important;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.797);
   border-radius: 8px;
 }
 
@@ -111,4 +111,14 @@ body {
 .submitting {
   background-color: #a0d6a4;
   cursor: not-allowed;
+}
+
+.login-main {
+  background-image: url(../Assets/login_staff.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+label {
+  overflow: hidden;
 }

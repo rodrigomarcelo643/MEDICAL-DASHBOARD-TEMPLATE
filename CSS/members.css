@@ -40,7 +40,9 @@
   transform: translateY(-100px);
   transition: opacity 0.5s ease, transform 0.5s ease;
 }
-
+#membership {
+  margin-left: -20px !important;
+}
 /* Showing state with animation */
 .AddItemModal.showing {
   opacity: 1;
@@ -311,7 +313,12 @@
   font-size: 16px;
   margin-top: 0px !important;
 }
-
+label,
+p,
+h1,
+h2 {
+  overflow: hidden;
+}
 .add-to-cart-btn:hover {
   background-color: rgb(13, 129, 13) !important;
   color: rgb(255, 255, 255) !important;

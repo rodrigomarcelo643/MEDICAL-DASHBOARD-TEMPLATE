@@ -99,6 +99,49 @@
 
 
 
+    <!--Adding Admin -->
+
+    <div class="bg-white shadow-md w-full mt-5" id="StaffForm">
+        <div>
+            <form id="adminForm" method="POST" action="add_admin.php">
+                <div class="input-container block">
+                    <label>First Name </label>
+                    <input type="text" placeholder="" name="AdminfirstName" required>
+                </div>
+                <div class="input-container block">
+                    <label>Last Name </label>
+                    <input type="text" placeholder="" name="AdminlastName" required>
+                </div>
+                <div class="input-container block">
+                    <label>Admin Address </label>
+                    <input type="text" placeholder="" name="address" required>
+                </div>
+                <div class="input-container block">
+                    <label>Contact No </label>
+                    <input type="text" placeholder="" name="contact_number" required>
+                </div>
+                <div class="input-container block">
+                    <label>Admin Username </label>
+                    <input type="text" placeholder="" name="username" required>
+                </div>
+                <div class="input-container block">
+                    <label>Admin Password </label>
+                    <input type="password" placeholder="" name="password" required>
+                </div>
+                <div class="input-container block">
+                    <label>Admin Email </label>
+                    <input type="email" placeholder="" name="email" required>
+                </div>
+                <button type="submit">
+                    Add Admin
+                </button>
+            </form>
+            <div id="error-message" style="color: red;"></div>
+
+        </div>
+    </div>
+
+
     <!--=============Script Tags=================-->
     <script src="../O-js/add_staff.js"></script>
 </body>

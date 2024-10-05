@@ -7,7 +7,6 @@ document
     var buttonText = document.getElementById("buttonText");
     var spinnerContainer = document.getElementById("spinnerContainer");
     var spinnerOverlay = document.getElementById("spinnerOverlay");
-    var noInternetModal = document.getElementById("NoInternetModal");
 
     //============== Clear previous error messages
     document.getElementById("usernameError").textContent = "";
@@ -18,7 +17,7 @@ document
     buttonText.textContent = "Signing In...";
     submitButton.disabled = true;
     spinnerContainer.classList.remove("hidden");
-    submitButton.style.backgroundColor = "lightgreen";
+    submitButton.style.backgroundColor = "#0aa2bd";
 
     var formData = new FormData(this);
     var xhr = new XMLHttpRequest();
@@ -29,19 +28,10 @@ document
       if (xhr.status >= 200 && xhr.status < 300) {
         var response = JSON.parse(xhr.responseText);
         if (response.status === "success") {
-          // ====================================Check for network connectivity again
-          if (navigator.onLine) {
-            spinnerOverlay.style.display = "flex";
-            setTimeout(function () {
-              window.location.href = "../p/d.php";
-            }, 1000);
-          } else {
-            //================================= Handle no internet connection
-            setTimeout(function () {
-              noInternetModal.style.display = "flex";
-            }, 0);
-            spinnerOverlay.style.display = "none";
-          }
+          spinnerOverlay.style.display = "flex";
+          setTimeout(function () {
+            window.location.href = "../p/d.php";
+          }, 1000);
         } else {
           handleError(response);
         }
@@ -74,21 +64,9 @@ document
       buttonText.textContent = "Sign In";
       submitButton.disabled = false;
       submitButton.classList.remove("submitting");
-      submitButton.style.backgroundColor = "green";
+      submitButton.style.backgroundColor = "#0aa2bd";
       spinnerContainer.classList.add("hidden");
     }
   });
 
-// =======================to close the no internet modal
-function closeNoInternet() {
-  document.getElementById("NoInternetModal").style.display = "none";
-}
-
-// =====================Listen for online/offline events
-window.addEventListener("offline", function () {
-  document.getElementById("NoInternetModal").style.display = "flex";
-  document.getElementById("spinnerOverlay").style.display = "none";
-});
-window.addEventListener("online", function () {
-  document.getElementById("NoInternetModal").style.display = "none";
-});
+// Remove the modal related functions as they are no longer needed

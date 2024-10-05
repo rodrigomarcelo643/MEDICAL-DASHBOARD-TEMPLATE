@@ -14,7 +14,7 @@ if ($productId > 0) {
         $product = $result->fetch_assoc();
         echo json_encode($product);
     } else {
-        echo json_encode(array("error" => "Product not found")); 
+        echo json_encode(array("error" => "Product not found"));    
     }
 
     $stmt->close();

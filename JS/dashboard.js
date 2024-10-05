@@ -2,6 +2,22 @@
 function showSection(sectionId, initialLoad = false) {
   const sections = document.querySelectorAll(".section");
   const sidebarItems = document.querySelectorAll(".sidebar-item");
+  const sidebarIcons = {
+    dashboard: "../Assets/dash_active.png",
+    products: "../Assets/products_main_active.png",
+    membership: "../Assets/membership_main_active.png",
+    sendSales: "../Assets/reports_main_active.png",
+    members: "../Assets/billing_main_active.png",
+    Expenses: "../Assets/expenses_main_active.png",
+  };
+  const defaultIcons = {
+    dashboard: "../Assets/dashboard_main.png",
+    products: "../Assets/products_main.png",
+    membership: "../Assets/membership_main.png",
+    sendSales: "../Assets/reports_main.png",
+    members: "../Assets/billing_main.png",
+    Expenses: "../Assets/expenses_main.png",
+  };
 
   showLoadingSpinner();
 
@@ -12,9 +28,15 @@ function showSection(sectionId, initialLoad = false) {
       section.classList.add("hidden");
     });
 
-    sidebarItems.forEach((item) =>
-      item.classList.remove("bg-green-500", "text-black")
-    );
+    sidebarItems.forEach((item) => {
+      item.classList.remove("bg-green-500", "text-black");
+      // Revert the icons to the default icon for inactive items
+      const icon = item.querySelector(".sidebar-icon");
+      if (icon) {
+        const section = item.getAttribute("data-section");
+        icon.src = defaultIcons[section];
+      }
+    });
 
     const sectionToShow = document.getElementById(sectionId);
     if (sectionToShow) {
@@ -27,6 +49,12 @@ function showSection(sectionId, initialLoad = false) {
     );
     if (activeSidebarItem) {
       activeSidebarItem.classList.add("bg-green-500", "text-black");
+
+      // Change the icon of the active item
+      const activeIcon = activeSidebarItem.querySelector(".sidebar-icon");
+      if (activeIcon) {
+        activeIcon.src = sidebarIcons[sectionId];
+      }
     }
 
     hideLoadingSpinner();
@@ -139,10 +167,11 @@ function performLogout() {
 // ===================================Function to check screen size and adjust sidebar visibility
 function checkScreenSize() {
   const sidebar = document.getElementById("sidebar");
+
   if (window.innerWidth >= 1024) {
+    // Ensure the sidebar is visible on larger screens
     sidebar.classList.remove("hidden");
-  } else {
-    sidebar.classList.add("hidden");
+  } else if (!document.body.classList.contains("sidebar-hidden")) {
   }
 }
 
@@ -185,34 +214,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const totalAmount = parseFloat(data.total_amount).toFixed(2);
 
         document.getElementById("total-expenses").textContent = totalAmount;
-
-        const percentageChange = calculatePercentageChange(totalAmount);
-        const percentageText = document.getElementById("percentage-text");
-        const percentageBorder = document.getElementById("percentage-border");
-        const percentageSign = document.getElementById("percentage-sign");
-
-        const THRESHOLD_PERCENTAGE = 25;
-
-        if (percentageChange > THRESHOLD_PERCENTAGE) {
-          percentageBorder.classList.remove("green");
-          percentageBorder.classList.add("red");
-          percentageSign.style.color = "red";
-          percentageText.textContent = `- ${percentageChange}%`;
-        } else {
-          percentageBorder.classList.remove("red");
-          percentageBorder.classList.add("green");
-          percentageSign.style.color = "green";
-          percentageText.textContent = `+ ${percentageChange}%`;
-        }
-      } else {
-        document.getElementById("total-expenses").textContent = "0.00";
-        const percentageText = document.getElementById("percentage-text");
-        const percentageBorder = document.getElementById("percentage-border");
-        const percentageSign = document.getElementById("percentage-sign");
-
-        percentageBorder.classList.remove("red");
-        percentageBorder.classList.remove("green");
-        percentageText.textContent = "No Data";
       }
     })
     .catch((error) => {
@@ -225,22 +226,66 @@ function calculatePercentageChange(totalAmount) {
 }
 
 //=============================================Counting Animation for Each Data===
-function countUp(elementId, duration) {
+function countUp(elementId, duration, previousValue) {
   const element = document.getElementById(elementId);
-  const endValue = parseFloat(element.getAttribute("data-end-value"));
+  const endValue = parseFloat(element.getAttribute("data-end-value")) || 0; // Ensure a fallback to 0 if data is missing
   const startValue = 0;
   const startTime = performance.now();
 
   function updateCount(timestamp) {
     const elapsed = timestamp - startTime;
     const progress = Math.min(elapsed / duration, 1);
-    const currentValue = Math.floor(
-      progress * (endValue - startValue) + startValue
+    const currentValue = progress * (endValue - startValue) + startValue;
+
+    // Create the inner HTML for the total expenses
+    element.innerHTML = `
+          <div style="display: flex; align-items: center;">
+              <img src="../Assets/pesos.png" alt="₱" style="width: 20px; height: auto; vertical-align: middle; margin-right: 5px;" />
+              ${currentValue.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+          </div>
+      `;
+
+    // Handle percentage change calculation if previous value exists
+    let percentageChange = 0;
+    if (previousValue) {
+      if (previousValue !== 0) {
+        percentageChange = ((endValue - previousValue) / previousValue) * 100;
+      } else if (endValue > 0) {
+        percentageChange = 100; // Full increase from 0
+      }
+    }
+
+    const percentageChangeElement = document.getElementById(
+      `${elementId}-change`
     );
-    element.textContent = currentValue.toLocaleString("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
+    const changeSymbol = percentageChange > 0 ? "↑" : "↓";
+    const changeImage =
+      percentageChange > 0
+        ? "../Assets/up-arrow.png"
+        : "../Assets/down-arrow.png"; // Images for arrows
+
+    // Determine the color and format the percentage display
+    let changeColor = "text-green"; // Default to green
+    let formattedPercentage = `+ ${Math.abs(percentageChange).toFixed(2)}%`; // Absolute value for display
+
+    if (changeSymbol === "↑") {
+      // When arrow is up (indicating decrease)
+      changeColor = "text-red"; // Change color to red
+      formattedPercentage = `-${Math.abs(percentageChange).toFixed(2)}%`; // Show as negative
+    } else if (changeSymbol === "↓") {
+      // When arrow is down (indicating increase)
+      changeColor = "text-green"; // Change color to green
+      formattedPercentage = `${Math.abs(percentageChange).toFixed(2)}%`; // Show as positive
+    }
+
+    // Set the percentage change HTML
+    percentageChangeElement.innerHTML = `
+          <span class="${changeColor}">${formattedPercentage}</span>
+          <img src="${changeImage}" alt="${changeSymbol}" class="w-4 h-4 ml-1" />
+      `;
 
     if (progress < 1) {
       requestAnimationFrame(updateCount);
@@ -255,12 +300,20 @@ async function fetchData() {
     const response = await fetch("../p/track_expenses.php");
     const data = await response.json();
 
+    // Get the previous value (from DB or other source) for comparison
+    const previousTotalExpenses = 900; // Replace this with the actual previous data source
+
+    // Set the data-end-value attribute for animated count
+    const totalAmount = data.total_amount ? parseFloat(data.total_amount) : 0; // Default to 0 if no data
+
     document
       .getElementById("total-expenses")
-      .setAttribute("data-end-value", data.total_amount || "0.00");
-    countUp("dailySales", 2000);
-    countUp("total-expenses", 2000);
-    countUp("dailyDebt", 2000);
+      .setAttribute("data-end-value", totalAmount);
+
+    // Call countUp with the previous value to calculate the change
+    countUp("total-expenses", 2000, previousTotalExpenses);
+    countUp("dailySales", 2000); // Assuming no comparison for daily sales
+    countUp("dailyDebt", 2000); // Assuming no comparison for daily debt
   } catch (error) {
     console.error("Error fetching data:", error);
   }

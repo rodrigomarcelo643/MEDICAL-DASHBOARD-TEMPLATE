@@ -8,6 +8,10 @@
   z-index: 1001;
   overflow: auto;
 }
+label {
+  overflow: hidden;
+}
+
 .modal-content-settings {
   background-color: #fefefe;
   margin: 2% auto;

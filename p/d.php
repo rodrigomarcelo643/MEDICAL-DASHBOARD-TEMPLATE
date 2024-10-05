@@ -11,8 +11,8 @@ $firstName = htmlspecialchars($_SESSION['firstName']);
 $lastName = htmlspecialchars($_SESSION['lastName']);
 $staffEmail = htmlspecialchars($_SESSION['staffEmail']);
 $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : ''; 
-?>
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,17 +29,15 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
     <link href="../CSS/expenses.css" rel="stylesheet">
     <link href="../CSS/profile.css" rel="stylesheet">
     <link rel="icon" href="../Assets/Yokoks_logo.png">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/dist/index.global.min.css' rel='stylesheet' />
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/dist/index.global.min.js'></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.0.2/index.min.css" />
     <title>Cebu City Branch | Staff Dashboard</title>
     <link href="../CSS/showSettings.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Inter" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
 </head>
 <!--=========================================Show Settings==================-->
 <div id="ShowSettings" style="display: none;">
@@ -193,7 +191,6 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                     <button type="submit" class="update-button">Update</button>
                 </form>
             </div>
-
         </div>
     </div>
 </div>
@@ -278,13 +275,7 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
         <div class=" flex">
             <h1 class="text-lg font-bold" style="margin-right:250px;font-size:20px;width:50%;margin-top:20px;">
                 Notifications</h1>
-            <button class="button">
-                <svg viewBox="0 0 448 512" class="bell">
-                    <path
-                        d="M224 0c-17.7 0-32 14.3-32 32V49.9C119.5 61.4 64 124.2 64 200v33.4c0 45.4-15.5 89.5-43.8 124.9L5.3 377c-5.8 7.2-6.9 17.1-2.9 25.4S14.8 416 24 416H424c9.2 0 17.6-5.3 21.6-13.6s2.9-18.2-2.9-25.4l-14.9-18.6C399.5 322.9 384 278.8 384 233.4V200c0-75.8-55.5-138.6-128-150.1V32c0-17.7-14.3-32-32-32zm0 96h8c57.4 0 104 46.6 104 104v33.4c0 47.9 13.9 94.6 39.7 134.6H72.3C98.1 328 112 281.3 112 233.4V200c0-57.4 46.6-104 104-104h8zm64 352H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7s18.7-28.3 18.7-45.3z">
-                    </path>
-                </svg>
-            </button>
+
         </div>
         <!--============Today Content Goes here==============-->
         <div class="Today-container flex" id="Today-container">
@@ -367,17 +358,18 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
 <div id="AddProduct" class="fixed  product inset-0 flex items-center justify-center bg-black bg-opacity-60 hidden z-50">
     <div class="modal-content modal-addProduct  bg-white p-8 rounded-lg shadow-lg w-full max-w-sm transform scale-90 transition-transform duration-300 ease-in-out hover:scale-100"
         style="width:450px !important;">
-        <div class="flex justify-end">
+        <div class="flex justify-end" style="margin-top:25px;margin-right:10px;">
             <button id="close-notification" onclick="CloseProduct()"
                 class="text-gray-600 hover:text-gray-900 transition-colors duration-150">
                 <img src="../Assets/close.png" alt="Close" class="w-6 h-6">
             </button>
         </div>
         <form id="productForm" method="POST" enctype="multipart/form-data" class="space-y-6">
+
             <!--===================TITLE PRODUCT ADDING =====================-->
             <div class="TitleAddingProduct flex" style="margin-bottom:25px;">
                 <div class="before-div"
-                    style="margin-right:15px;width:40px;height:15px;margin-top:5px;margin-bottom:20px;border-radius:20px;background-color:#259B12">
+                    style="margin-right:15px;width:40px;height:15px;margin-top:5px;margin-bottom:20px;border-radius:20px;background-color:#009b7b">
                 </div>
                 <h1 class="text-gray-600 font-bold" style="font-size:16px;color:gray;letter-spacing:1px;">ADD NEW
                     PRODUCT</h1>
@@ -499,31 +491,149 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                 </button>
             </div>
         </form>
-
-
     </div>
 
 </div>
 </div>
+<style>
+.sidebar {
+    transition: all 0.5s ease;
+}
+
+.content {
+    margin-left: 200px;
+    transition: all 0.5s ease;
+    width: calc(100% - 180px);
+}
+
+.sidebar-hidden .sidebar {
+    left: -200px;
+}
+
+.sidebar-hidden .content {
+    margin-left: 0;
+    width: 100%;
+}
+
+.notif {
+    left: 0;
+    transition: all 0.5s ease;
+}
+
+.sidebar-hidden .notif {
+    margin-left: 0;
+    width: 100%;
+}
+
+.sidebar-toggle-icon {
+    transition: all 0.5s ease;
+    width: 32px;
+    height: 32px;
+}
+
+.sidebar-hidden .sidebar-toggle-icon {
+    margin-left: -10px;
+    z-index: 1001;
+}
+
+.branch-title {
+    transition: all 0.5s ease;
+}
+
+.sidebar-hidden .branch-title {
+    margin-left: 0;
+}
+</style>
+<script>
+function toggleSidebar1() {
+    const body = document.body;
+    const toggleIcon = document.querySelector('.sidebar-toggle-icon');
+
+    body.classList.toggle('sidebar-hidden');
+
+    if (toggleIcon.style.marginLeft === "200px") {
+        toggleIcon.style.marginLeft = "0";
+    } else {
+        toggleIcon.style.marginLeft = "200px";
+
+    }
+}
+</script>
 
 <body class="bg-white flex">
     <div class="notif notif-icon flex items-center space-x-2 cursor-pointer bg-white"
-        style="position:fixed;width:100%;border-bottom:2px solid green;cursor:default;">
-        <img src="../Assets/location.png" style="width:35px;height:35px;position:relative;left:200px;top:-3px;">
-        <h1 class="text-left" style="flex: 1;margin-left:210px;font-size:25px;font-weight:bold;color:green;">Cebu City
-            Branch</h1>
-        <button class="button" id="notif-icon">
-            <svg viewBox="0 0 448 512" class="bell">
-                <path
-                    d="M224 0c-17.7 0-32 14.3-32 32V49.9C119.5 61.4 64 124.2 64 200v33.4c0 45.4-15.5 89.5-43.8 124.9L5.3 377c-5.8 7.2-6.9 17.1-2.9 25.4S14.8 416 24 416H424c9.2 0 17.6-5.3 21.6-13.6s2.9-18.2-2.9-25.4l-14.9-18.6C399.5 322.9 384 278.8 384 233.4V200c0-75.8-55.5-138.6-128-150.1V32c0-17.7-14.3-32-32-32zm0 96h8c57.4 0 104 46.6 104 104v33.4c0 47.9 13.9 94.6 39.7 134.6H72.3C98.1 328 112 281.3 112 233.4V200c0-57.4 46.6-104 104-104h8zm64 352H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7s18.7-28.3 18.7-45.3z">
-                </path>
-            </svg>
-        </button>
-        <img src="<?php echo !empty($profileImage) ? 'data:image/jpeg;base64,' . htmlspecialchars($profileImage) : '../Assets/profile.png'; ?>"
-            alt="Profile" class="w-8 h-8" style="width:35px;height:35px;cursor:default;border-radius:50%;">
-        <span style="border-bottom:4px solid green;cursor:default;"><?php echo $firstName; ?></span>
-        <img src="../Assets/chevron-down.png" class="chevron w-4 h-4" alt="Dropdown">
+        style="position:fixed;width:100%;cursor:default;padding:10px 0;align-items:center;">
+        <h1 style="padding:10px"></h1>
+        <img src="../Assets/bar_icon.png"
+            class="w-8 h-8  text-white text-4xl top-5 left-4 cursor-pointer toggle sidebar-toggle-icon"
+            alt="Toggle Sidebar" style="margin-left:200px;width:33px;height:23px;" onclick="toggleSidebar1()">
+        </span>
+        <h1 class="text-left branch-title"
+            style="flex: 1;font-size:21px;color:#737791!important;font-weight:bold;color:green;text-align:left;margin-left: 30px;">
+            Cebu City Branch
+        </h1>
+
+        <img src="../Assets/Notifications.png" id="notif-icon" style="margin-right:15px;width:22px">
+
+        <div class="flex flex-col items-center" style="overflow:hidden;">
+            <div class="flex items-center">
+                <img src="<?php echo !empty($profileImage) ? 'data:image/jpeg;base64,' . htmlspecialchars($profileImage) : '../Assets/profile_default.png'; ?>"
+                    alt="Profile" class="w-8 h-8"
+                    style="width:45px;height:45px;cursor:default;border-radius:10%;z-index:1;margin-bottom:5px;">
+                <span style="cursor:default;color:#151D48;font-size:16px;margin-top:-30px;margin-right:10px;">
+                    <?php echo $firstName; ?>
+                </span>
+                <img src="../Assets/chevron_profile.png" class="chevron w-4 h-4" alt="Dropdown"
+                    style="margin-left: 5px;margin-top:-25px;margin-right:20px;">
+            </div>
+            <span style="font-size: 15px; color: gray; margin-top: -28px;margin-left:6px; cursor: default;">Staff</span>
+        </div>
     </div>
+    <style>
+    .notif {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .branch-title {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* For smaller screens */
+    @media (max-width: 768px) {
+        .branch-title {
+            font-size: 20px;
+            text-align: center;
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .notif {
+            justify-content: center;
+        }
+
+        .notif-icon img {
+            margin-right: 5px;
+        }
+
+        .flex.items-center img {
+            width: 45px;
+            height: 45px;
+        }
+
+        .flex.items-center span {
+            font-size: 16px;
+        }
+
+        .chevron {
+            width: 3px;
+            height: 3px;
+        }
+    }
+    </style>
+
+
 
     <!-- Dropdown menu -->
     <div class="dropdown-menu"
@@ -547,53 +657,48 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
             </a>
         </div>
     </div>
-    <span class=" fixed  text-white text-4xl top-5 left-4 cursor-pointer toggle " onclick="toggleSidebar()">
-        <img src="../Assets/sidebar-icon.png" class="w-8 h-8 rounded-md" alt="Toggle Sidebar">
-    </span>
-
     <div class="sidebar fixed top-0 shadow-md bottom-0 lg:left-0 p-2 w-64 overflow-y-auto text-center bg-white hidden lg:block sidebar-custom-shadow"
         id="sidebar">
         <div class="text-black-100 text-xl logo-move">
             <div class="p-2.5 mt-1 flex items-center logo">
-                <img src="../../Assets/Yokoks_logo.png" class="medical_logo" alt="Yokoks Logo">
-
+                <img src="../../Assets/logo.png" class="medical_logo" alt="Yokoks Logo">
                 </span>
             </div>
         </div>
         <!-- Sidebar Items -->
         <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer sidebar-item"
             data-section="dashboard" onclick="showSection('dashboard')">
-            <img src="../Assets/dashboard.png" class="sidebar-icon" alt="Dashboard"
+            <img src="../Assets/dashboard_main.png" class="sidebar-icon" alt="Dashboard"
                 style="width: 20px; height: 20px; object-fit: contain;">
             <span class="text-[15px] font-bold" style="margin-left:10px">Dashboard</span>
         </div>
         <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer sidebar-item"
             data-section="products" onclick="showSection('products')">
-            <img src="../Assets/products.png" class="sidebar-icon" alt="Dashboard"
+            <img src="../Assets/products_main.png" class="sidebar-icon" alt="Dashboard"
                 style="width: 20px; height: 20px; object-fit: contain;">
             <span class="text-[15px] font-bold" style="margin-left:10px">Products</span>
         </div>
         <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer sidebar-item"
             data-section="membership" onclick="showSection('membership')">
-            <img src="../Assets/membership.png" class="sidebar-icon" alt="Dashboard"
+            <img src="../Assets/membership_main.png" class="sidebar-icon" alt="Dashboard"
                 style="width: 20px; height: 20px; object-fit: contain;">
             <span class="text-[15px] font-bold" style="margin-left:10px">Membership</span>
         </div>
         <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer sidebar-item"
             data-section="sendSales" onclick="showSection('sendSales')">
-            <img src="../Assets/reports.png" class="sidebar-icon" alt="Dashboard"
+            <img src="../Assets/reports_main.png" class="sidebar-icon" alt="Dashboard"
                 style="width: 20px; height: 20px; object-fit: contain;">
             <span class="text-[15px] font-bold" style="margin-left:10px">Reports</span>
         </div>
         <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer sidebar-item"
             data-section="members" onclick="showSection('members')">
-            <img src="../Assets/bill.png" class="sidebar-icon" alt="Dashboard"
+            <img src="../Assets/billing_main.png" class="sidebar-icon" alt="Dashboard"
                 style="width: 20px; height: 20px; object-fit: contain;">
             <span class="text-[15px] font-bold" style="margin-left:10px">Billing</span>
         </div>
         <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer sidebar-item"
             data-section="Expenses" onclick="showSection('Expenses')">
-            <img src="../Assets/expenses.png" class="sidebar-icon" alt="Dashboard"
+            <img src="../Assets/expenses_main.png" class="sidebar-icon" alt="Dashboard"
                 style="width: 20px; height: 20px; object-fit: contain;">
             <span class="text-[15px] font-bold" style="margin-left:10px">Expenses</span>
         </div>
@@ -604,32 +709,17 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
         <!--==============================Dashboard Section===================================================-->
         <div id="dashboard" class="section hidden p-6 dashboard-content">
             <div class="Welcome-flex">
-                <div class="yellow-indicator"></div>
-                <h1 class="text-gray-500 font-bold welcome">Welcome <?php echo htmlspecialchars($firstName); ?>
-                </h1>
             </div>
-            <p class="text-gray-300 font-bold analytics">Analytics and Dashboard</p>
+            <p class="font-bold analytics" style="color:#124137;font-size:25px;margin-left:18px;margin-bottom:-30px;">
+                Dashboard and
+                Analytics
 
-            <!--=======Search Icon==================-->
-            <div class="flex">
-                <img src="../Assets/date.png" style="width:38px;height:38px; margin-right:15px;">
-                <h1 class="mt-2"><span id="lastUpdated" class=" mt-2 font-semibold">N/A</span></h1>
-            </div>
-            <div class="calendar-container" style="margin-bottom:20px;border-bottom:2px solid green">
 
-                <div class="calendar-carousel-wrapper" style="margin-bottom:10px;">
-                    <div class="calendar-carousel">
-                        <!-- Days of the week will be dynamically inserted here -->
-                    </div>
-                </div>
-            </div>
-            <!--=======Search Icon==================-->
-
-            <!--=====================Boxes Sales Report ====================================-->
+                <!--=====================Boxes Sales Report ====================================-->
             <div class="flex flex-wrap justify-center space-x-4 mt-8" style="margin-left:-30px;margin-top:0px;">
                 <!-- Box 1 -->
                 <div class="box-d bg-white flex flex-col items-center justify-center shadow-lg w-full max-w-xs md:w-80 custom-shadow subtle-shadow mb-10 mr-8 box-shadow"
-                    style="margin-right:30px;margin-bottom:30px;">
+                    style="margin-right:30px;margin-bottom:30px;border-radius:25px;">
                     <div class="flex flex-col items-center justify-start w-full p-4">
                         <div class="flex items-center justify-between w-full mb-4">
                             <p class="text-lg font-semibold">Overall Sales</p>
@@ -644,9 +734,9 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                         <div class="flex items-center" style="margin-left:-20px;margin-top:0px;">
                             <img src="../Assets/pesos.png" class="w-5 h-5"
                                 style="width:30px;margin-right:10px;margin-top:9px;" alt="pesos icon">
-                            <h1 id="dailySales" class="ml-2 text-lg font-bold" data-end-value="3252.20"
-                                style="margin-top:12px">3252.20</h1>
-                            <img src="../Assets/sales.png" class="ml-2"
+                            <h1 id="dailySale" class="ml-2 text-lg font-bold" data-end-value="3252.20"
+                                style="margin-top:12px">0.00</h1>
+                            <img src="../Assets/sales_up.png" class="ml-2"
                                 style="margin-left:60px;margin-top:-3px;width:75px;height:68px;" alt="sales up icon">
                         </div>
                     </div>
@@ -654,7 +744,7 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
 
                 <!-- Box 2 -->
                 <div class="box-d bg-white flex flex-col items-center justify-center shadow-lg w-full max-w-xs md:w-80 custom-shadow subtle-shadow mb-10 mr-8 box-shadow"
-                    style="margin-right:30px;margin-bottom:30px;">
+                    style="margin-right:30px;margin-bottom:30px;border-radius:25px;">
                     <div class="flex flex-col items-center justify-start w-full p-4">
                         <div class="flex items-center justify-between w-full mb-4">
                             <p class="text-lg font-semibold">Overall Expenses</p>
@@ -676,10 +766,9 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                         </div>
                     </div>
                 </div>
-
                 <!-- Box 3 -->
                 <div class="box-d bg-white flex flex-col items-center justify-center shadow-lg w-full max-w-xs md:w-80 custom-shadow subtle-shadow mb-10 mr-8 box-shadow"
-                    style="margin-right:30px;margin-bottom:30px;">
+                    style="margin-right:30px;margin-bottom:30px;border-radius:25px;">
                     <div class="flex flex-col items-center justify-start w-full p-4">
                         <div class="flex items-center justify-between w-full mb-4">
                             <p class="text-lg font-semibold">Overall Debt</p>
@@ -695,13 +784,12 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                             <img src="../Assets/pesos.png" class="w-5 h-5"
                                 style="width:30px;margin-right:10px;margin-top:9px;" alt="pesos icon">
                             <h1 id="dailyDebt" class="ml-2 text-lg font-bold" data-end-value="1500.20"
-                                style="margin-top:12px">1500.20</h1>
+                                style="margin-top:12px">0.00</h1>
                             <img src="../Assets/debt.png" class="ml-2"
                                 style="margin-left:60px;margin-top:-3px;width:75px;height:70px;" alt="debt icon">
                         </div>
                     </div>
                 </div>
-
                 <!--Box3-->
             </div>
 
@@ -731,7 +819,7 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                 <table class="recent-table">
                     <thead>
                         <tr>
-                            <th colspan="3" class="text-left text-gray-600" style="font-size:20px;color:green;">
+                            <th colspan="3" class="" style="font-size:20px;color:green;">
                                 Recent
                                 Customers
                             </th>
@@ -805,7 +893,7 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
         <!-- ============================Products Section================================-->
         <div id="products" class="section hidden">
             <h1 class="font-bold text-gray-500 hear-product-text mt-10"
-                style="margin-top:40px;font-size:30px;margin-bottom:20px;">Product
+                style="margin-top:40px;font-size:30px;margin-bottom:20px;color:#124137;">Product
                 Statistics</h1>
 
             <div class="chart-container">
@@ -929,9 +1017,9 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                     <button type="submit" class="search-button">Search</button>
                 </form>
 
-                <button type="button" class="button-add-item" onclick="AddProduct()">
+                <button type="button" style="background-color:#009b7b" class="button-add-item" onclick="AddProduct()">
                     <span class="button__text">Add Product</span>
-                    <span class="button__icon">
+                    <span class="button__icon" style="background-color:#009b7b">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2"
                             stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none"
                             class="svg">
@@ -959,7 +1047,7 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                                 <th class="p-3 border-b">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="text-gray-600" style="border-bottom:3px solid green;">
+                        <tbody class="text-gray-600">
                             <!-- Rows will be dynamically inserted here -->
                         </tbody>
                     </table>
@@ -971,12 +1059,12 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
         <!--=================== Membership Section =================================-->
         <div id="membership" class="section hidden p-4">
             <div class="member-people text-center justify-center">
-                <img src="../Assets/member_people.png">
+                <img src="../Assets/member_people.png" style="width:250px">
             </div>
             <div class="flex justify-start mb-10 btn-add-member">
                 <!-- Add Member Button -->
                 <div class="add-member-button flex items-center">
-                    <button id="openModalButton" onclick="showAddMembershipModal()"
+                    <button id="openModalButton" onclick="showAddMembershipModal()" style="background-color:#009b7b"
                         class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Add Member</button>
                 </div>
             </div>
@@ -1040,7 +1128,7 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <?php echo $member['remaining_time']; ?>
                                     <?php if (strpos($member['remaining_time'], 'Expired') !== false): ?>
-                                    <button class=" renew-btn "
+                                    <button class=" renew-btn " style="background-color:#009b7b"
                                         onclick="showRenewModal(<?php echo htmlspecialchars(json_encode($member)); ?>)">Renew</button>
                                     <?php endif; ?>
                                 </td>
@@ -1071,7 +1159,7 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                 </div>
                 <div class="flex">
                     <div
-                        style="width:40px;height:15px;border-radius:20px;background-color:#259B12;margin-right:15px;margin-top:8px;">
+                        style="width:40px;height:15px;border-radius:20px;background-color:#009b7b;margin-right:15px;margin-top:8px;">
                     </div>
                     <h2 class="text-xl font-semibold mb-10 text-left"
                         style="margin-bottom:20px;font-weight:bold;color:gray;letter-spacing:1px;">Renew Membership</h2>
@@ -1079,12 +1167,12 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                 <div class="modal-content-member-wrap">
                     <form id="renewMemberForm" class="memberForm" method="POST" style="width:800px !important;">
                         <div class="flex">
-                            <div class="input-container" style="margin-right:10px !important;">
+                            <div class="input-container" style="margin-right:10px !important;width:100%;">
                                 <input type="text" id="renewFirstName" name="renewFirstName" placeholder=" " readonly>
                                 <label for="renewFirstName" class="text-sm font-bold text-gray-700">First Name</label>
                             </div>
-                            <div class="input-container">
-                                <input type="text" id="renewLastName" name="renewLastName" placeholder=" " readonly>
+                            <div class="input-container" style="width:100%;">
+                                <input type=" text" id="renewLastName" name="renewLastName" placeholder=" " readonly>
                                 <label for="renewLastName" class="text-sm font-bold text-gray-700">Last Name</label>
                             </div>
                         </div>
@@ -1096,7 +1184,7 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                         </div>
                         <div class="flex mt-20" style="margin-top:40px;margin-bottom:-10px;">
                             <div
-                                style="width:40px;height:15px;border-radius:20px;background-color:#259B12;margin-right:15px;margin-top:8px;">
+                                style="width:40px;height:15px;border-radius:20px;background-color:#009b7b;margin-right:15px;margin-top:8px;">
                             </div>
                             <h2 class="text-xl font-semibold mb-10 text-left"
                                 style="margin-bottom:20px;font-weight:bold;color:gray;letter-spacing:1px;">Membership
@@ -1119,7 +1207,7 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                             </div>
                         </div>
                         <div class="flex justify-end mt-4">
-                            <button type="submit" class="full-width-button">
+                            <button type="submit" class="full-width-button" style="background-color:#009b7b">
                                 <h1 class="text-lg text-white font-bold">Renew Membership</h1>
                             </button>
                         </div>
@@ -1145,7 +1233,7 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                 <!--==============TITLE MEMBER FLEX===============-->
                 <div class="flex">
                     <div
-                        style="width:40px;height:15px;border-radius:20px;background-color:#259B12;margin-right:15px;margin-top:8px;">
+                        style="width:40px;height:15px;border-radius:20px;background-color:#009b7b;margin-right:15px;margin-top:8px;">
                     </div>
                     <h2 class="text-xl font-semibold mb-10 text-left"
                         style="margin-bottom:20px;font-weight:bold;color:gray;letter-spacing:1px;">Add
@@ -1153,9 +1241,9 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                 </div>
                 <!--==============TITLE MEMBER FLEX===============-->
                 <div class="modal-content-member-wrap">
-                    <form id="memberForm" class="memberForm" style="width:800px !important;">
+                    <form id="memberForm" class="memberForm">
                         <div class="flex">
-                            <div class="input-container" style="margin-right:10px !important;">
+                            <div class="input-container" style="margin-right:10px !important;" style="width:100%">
                                 <input type="text" id="firstName" name="firstName" placeholder=" " required>
                                 <label for="firstName" class="text-sm font-bold text-gray-700">First Name</label>
                             </div>
@@ -1174,7 +1262,7 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                         <!--==============TITLE MEMBER FLEX===============-->
                         <div class="flex mt-20" style="margin-top:40px;margin-bottom:-10px;">
                             <div
-                                style="width:40px;height:15px;border-radius:20px;background-color:#259B12;margin-right:15px;margin-top:8px;">
+                                style="width:40px;height:15px;border-radius:20px;background-color:#009b7b;margin-right:15px;margin-top:8px;">
                             </div>
                             <h2 class="text-xl font-semibold mb-10 text-left"
                                 style="margin-bottom:20px;font-weight:bold;color:gray;letter-spacing:1px;">Membership
@@ -1182,7 +1270,7 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                         </div>
                         <!--==============TITLE MEMBER FLEX===============-->
                         <div class="custom-select" style="margin-bottom:15px;">
-                            <select id="membershipType" name="membershipType">
+                            <select id="membershipType" name="membershipType" style="border:2px solid #009b7b">
                                 <option value="daily-basic">Daily Basic</option>
                                 <option value="daily-pro">Daily Pro</option>
                                 <option value="monthly-basic">Monthly Basic</option>
@@ -1191,7 +1279,7 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
 
                         </div>
 
-                        <div class="mb-4" style="  border: 2px solid #4caf50;border-radius:7px;">
+                        <div class="mb-4" style="  border: 2px solid #009b7b;border-radius:7px;">
                             <div style="padding:7px;">
                                 <p class="text-gray-600 font-bold" style="color:gray;font-size:14px;margin-bottom:5px;">
                                     Total Amount</p>
@@ -1201,7 +1289,7 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                         </div>
 
                         <div class="flex justify-end mt-4">
-                            <button type="submit" class="full-width-button">
+                            <button type="submit" class="full-width-button" style="background-color:#009b7b">
                                 <h1 class="text-lg text-white font-bold">Add Member</h1>
                             </button>
                         </div>
@@ -1217,146 +1305,186 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
         </div>
         <!--=================== Send Sales Section ==============================================-->
         <div id="sendSales" class="section hidden">
-            <!--====================MEMBERSHIP REPORT SECTION=================================-->
-            <form class="container-edit-history">
+            <!--====================MEMBERSHIP
+            
+            REPORT SECTION=================================-->
+            <div class="container-edit-history">
 
-                <h1 class="Daily-Reports">Today's Reports</h1>
-                <div class="report-insights w-full max-w-md mx-auto">
-                    <div class="flex mb-10">
-                        <h2 class="text-2xl font-bold text-gray-800 mb-4">Report Insights</h2>
-                        <img src="../Assets/report-insight.png" class="icon-img">
-                    </div>
+                <h1 class="Daily-Reports" style="margin-left:18px;">Today's Reports</h1>
+                <div class="report-insights w-full max-w-md mx-auto"
+                    style="background-color:transparent;box-shadow:none;border:none;">
                     <div id="progress-container" class="progress-container">
-                        <div class="progress-block">
-                            <label class="progress-label">Daily Members</label>
-                            <div id="progress-circle" class="progress-circle"></div>
+                        <div class="progress-block" id="progressbar1">
+                            <label class="progress-label">Daily Members<label>
+                                    <div class="flex justify-between items-center">
+                                        <div id="daily-members-text"
+                                            style="margin-top:5px;margin-right:6px;letter-spacing:1.5px"
+                                            class="text-xl font-bold"></div>
+                                        <div id="daily-members-change" style="font-size:12px;"
+                                            class="ml-2 flex items-center">
+                                        </div>
+                                        <!-- For the percentage change and arrow -->
+                                    </div>
                         </div>
-                        <div class="progress-block">
+                        <div class="progress-block" id="progressbar2">
                             <label class="progress-label">Renewed Members</label>
-                            <div id="today-renewed-progress-circle" class="progress-circle"></div>
+                            <div class="flex justify-between items-center">
+                                <div id="today-renewed-members-text" style="margin-top:5px;letter-spacing:1.5px"
+                                    class="text-xl font-bold">
+                                </div>
+                                <div id="renewed-members-change" style="font-size:12px;font-weight:bold"
+                                    class="ml-2 flex items-center">
+                                </div>
+                                <!-- For the percentage change and arrow -->
+                            </div>
                         </div>
-                        <div class="progress-block">
+                        <div class="progress-block" id="progressbar3">
                             <label class="progress-label">Daily Expenses</label>
-                            <div id="expenses-progress-circle" class="progress-circle"></div>
+                            <div class="flex justify-between items-center">
+                                <div id="total-expenses" class="text-xl font-bold text-gray-900"
+                                    style="margin-top:12px;letter-spacing:1.5px;"></div>
+                                <div id="total-expenses-change" style="font-size:12px;" class="ml-2 flex items-center"
+                                    style="font-size:12px;font-weight:bold!important">
+                                </div>
+                                <!-- For the percentage change and arrow -->
+                            </div>
                         </div>
                     </div>
                 </div>
+                <!--===========Daily reports Sales===========================-->
+                <div class="report-insights w-full max-w-md mx-auto mb-10"
+                    style="background-color:transparent;box-shadow:none;border:none;margin-bottom:50px;margin-top:-20px;">
+                    <div id="progress-container" class="progress-container">
+                        <div class="progress-block" id="progressbar1">
+                            <label class="progress-label">Daily Gross Sales</label>
+                            <div class="flex justify-between items-center">
+                                <div id="daily-gross-sales" style="margin-top:5px;margin-right:6px;letter-spacing:1.5px"
+                                    class="text-xl font-bold"></div>
+                                <div id="daily-gross-sales" style="font-size:12px;" class="ml-2 flex items-center">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress-block" id="progressbar2">
+                            <label class="progress-label">Net Daily Sales</label>
+                            <div class="flex justify-between items-center">
+                                <div id="daily-sales-reports" style="margin-top:5px;letter-spacing:1.5px"
+                                    class="text-xl font-bold"></div>
+                            </div>
+                        </div>
 
+                    </div>
+                </div>
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    fetch('getNetData.php') // Ensure the correct path to your PHP file
+                        .then(response => response.json())
+                        .then(data => {
+                            // Update the HTML elements with the data
+                            document.getElementById('daily-sales-reports').innerText = data.net_daily_sales;
+                        })
+                        .catch(error => console.error('Error fetching sales data:', error));
+                });
+                </script>
 
+                <style>
+                .progress-block {
+
+                    flex-direction: column;
+
+                }
+                </style>
                 <!-- Report Insights -->
-                <div class="financial-overview" style="margin-bottom:30px;margin-top:10px;cursor:pointer;">
-                    <div class="financial-box bg-green block" id="viewStockHistory">
-                        <h3 class="text-xl font-semibold">View Edited Stock History</h3>
-                        <div class="text-center flex justify-center">
-                            <img src="../Assets/view_img.png" class="text-center;" style="width:65px;height:65px;">
-                        </div>
-                    </div>
-                    <div class="financial-box bg-red block">
-                        <h3 class="text-xl font-semibold">Expenses List</h3>
-                        <div class="text-center flex justify-center">
-                            <img src="../Assets/expenses_list.png" class="text-center;" style="width:65px;height:65px;">
-                        </div>
-
-                    </div>
-                    <div class="financial-box bg-blue block">
-                        <h3 class="text-xl font-semibold">Debt Lists</h3>
-                        <div class="text-center flex justify-center">
-                            <img src="../Assets/debt_list.png" class="text-center;" style="width:65px;height:65px;">
-                        </div>
-                    </div>
-                </div>
-
-                <!--=====================Boxes Sales Report ====================================-->
-                <div class="flex flex-wrap justify-center space-x-4 mt-8" style="margin-left:-30px;margin-top:0px;">
-                    <!-- Box 1 -->
-                    <div class="box-d bg-white flex flex-col items-center justify-center shadow-lg w-full max-w-xs md:w-80 custom-shadow subtle-shadow mb-10 mr-8 box-shadow"
-                        style="margin-right:30px;margin-bottom:30px;">
-                        <div class="flex flex-col items-center justify-start w-full p-4">
-                            <div class="flex items-center justify-between w-full mb-4">
-                                <p class="text-lg font-semibold">Daily Sales</p>
-                                <div id="percentage-border"
-                                    class="percentage-border flex items-center justify-center rounded-full h-16 w-16">
-                                    <span id="percentage-text1" style="font-size:12px;margin-top:-5px;"
-                                        class="text-xs text-black">
-                                        <span style="color:green">+</span> 25%
-                                    </span>
+                <div class="financial-overview" style="margin-bottom:30px;margin-top:-50px;cursor:pointer;">
+                    <div class="report-insights w-full max-w-md mx-auto"
+                        style="background-color:transparent;box-shadow:none;border:none;">
+                        <div id="viewStockHistory" class="progress-container">
+                            <div class="progress-block" id="progressbar1"
+                                style="background-color:transparent!important;border:2px solid #009B7B">
+                                <label class="text-center font-bold" style="margin-bottom:10px">Stock History</label>
+                                <div class="flex justify-center">
+                                    <img src="../Assets/stock_history.png" style="width:43px;" alt="Stock History">
                                 </div>
-                            </div>
-                            <div class="flex items-center" style="margin-left:-20px;margin-top:0px;">
-                                <img src="../Assets/pesos.png" class="w-5 h-5"
-                                    style="width:30px;margin-right:10px;margin-top:9px;" alt="pesos icon">
-                                <h1 id="dailySales" class="ml-2 text-lg font-bold" data-end-value="3252.20"
-                                    style="margin-top:12px">3252.20</h1>
-                                <img src="../Assets/sales.png" class="ml-2"
-                                    style="margin-left:60px;margin-top:-3px;width:75px;height:68px;"
-                                    alt="sales up icon">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Box 2 -->
-                    <div class="box-d bg-white flex flex-col items-center justify-center shadow-lg w-full max-w-xs md:w-80 custom-shadow subtle-shadow mb-10 mr-8 box-shadow"
-                        style="margin-right:30px;margin-bottom:30px;">
-                        <div class="flex flex-col items-center justify-start w-full p-4">
-                            <div class="flex items-center justify-between w-full mb-4">
-                                <p class="text-lg font-semibold">Daily Expenses</p>
-                                <div id="percentage-border"
-                                    class="percentage-border-expenses flex items-center justify-center rounded-full h-16 w-16">
-                                    <span id="percentage-text2" style="font-size:12px;margin-top:-10px;"
-                                        class="text-xs text-black">
-                                        <span id="percentage-sign" style="color:green">+</span> 25%
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="flex items-center" style="margin-left:-20px;margin-top:0px;">
-                                <img src="../Assets/pesos.png" class="w-5 h-5"
-                                    style="width:30px;margin-right:10px;margin-top:9px;" alt="pesos icon">
-                                <h1 id="total-expenses" class="ml-2 text-lg font-bold" data-end-value="0.00"
-                                    style="margin-top:12px">0.00</h1>
-                                <img src="../Assets/expense.png" class="ml-2"
-                                    style="margin-left:60px;width:75px;height:75px;margin-top:-3px;"
-                                    alt="expenses icon">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Box 3 -->
-                    <div class="box-d bg-white flex flex-col items-center justify-center shadow-lg w-full max-w-xs md:w-80 custom-shadow subtle-shadow mb-10 mr-8 box-shadow"
-                        style="margin-right:30px;margin-bottom:30px;">
-                        <div class="flex flex-col items-center justify-start w-full p-4">
-                            <div class="flex items-center justify-between w-full mb-4">
-                                <p class="text-lg font-semibold">Daily Debt</p>
-                                <div id="percentage-border"
-                                    class="percentage-border-expenses flex items-center justify-center rounded-full h-16 w-16">
-                                    <span id="percentage-text" style="font-size:12px;margin-top:-10px;"
-                                        class="text-xs text-black">
-                                        <span style="color:green">+</span> 25%
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="flex items-center" style="margin-left:-20px;margin-top:0px;">
-                                <img src="../Assets/pesos.png" class="w-5 h-5"
-                                    style="width:30px;margin-right:10px;margin-top:9px;" alt="pesos icon">
-                                <h1 id="dailyDebt" class="ml-2 text-lg font-bold" data-end-value="1500.20"
-                                    style="margin-top:12px">1500.20</h1>
-                                <img src="../Assets/debt.png" class="ml-2"
-                                    style="margin-left:60px;margin-top:-3px;width:75px;height:70px;" alt="debt icon">
                             </div>
                         </div>
                     </div>
                 </div>
-                <button class="submitReport">Submit Report</button>
-            </form>
+                <button class="submitReport" style="margin-left:18px;" type="button"
+                    onclick="showVerifyModal1('modal-submit-password')">Submit Report</button>
 
+                </form>
+            </div>
         </div>
 
+        <!--=============MODAL FOR DISPLAYING VERIFY WHEN SUBMITTING SALES =================-->
+        <!-- Modal for Password Verification on Submit -->
+        <div id="modal-submit-password" class="modal-expenses" style="display:none;">
+            <div class="modal-background" onclick="closeVerifyModal1()"></div>
+            <div class="modal-content-view-expense1">
+                <img src="../Assets/verify.png" class="text-center justify-center align-center">
+                <h3 class="modal-title" style="font-size:20px">Verify Password</h3>
+                <input type="password" id="submit-verification-password" placeholder="Enter your password" class="input"
+                    required />
+                <div id="submit-error-message" style="color: red; display: none;">Invalid password. Please try
+                    again.
+                </div>
+                <div class="flex">
+                    <button class="button is-primary confirm-delete-btn"
+                        style="flex: 1; white-space: nowrap; margin-right: 10px;"
+                        onclick="closeVerifyModal1()">Cancel</button>
+                    <button class="button is-primary confirm-delete-btn" id="confirm-submit-btn"
+                        style="flex: 1; white-space: nowrap;" onclick="confirmSubmitPassword1()">Confirm</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+        // Function to show the modal for password verification (for different actions)
+        function showVerifyModal1() {
+            document.getElementById('modal-submit-password').style.display = "block";
+        }
+
+        // Close modal
+        function closeVerifyModal1() {
+            document.getElementById('modal-submit-password').style.display = "none";
+        }
+
+        function confirmSubmitPassword1() {
+            const password = document.getElementById("submit-verification-password").value;
+
+            if (!password) {
+                document.getElementById("submit-error-message").innerHTML = "Password cannot be empty.";
+                document.getElementById("submit-error-message").style.display = "block";
+                return;
+            }
+
+            // Perform AJAX request to verify the password for report submission
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "verify_password_report.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    if (xhr.responseText === "success") {
+                        document.getElementById("modal-submit-password").style.display = "none";
+                        document.querySelector(".container-edit-history")
+                            .submit(); // Submit form after password verification
+                    } else {
+                        document.getElementById("submit-error-message").innerHTML =
+                            "Invalid password. Please try again.";
+                        document.getElementById("submit-error-message").style.display = "block";
+                    }
+                } else {
+                    document.getElementById("submit-error-message").innerHTML =
+                        "An error occurred. Please try again.";
+                    document.getElementById("submit-error-message").style.display = "block";
+                }
+            };
+
+            xhr.send("password=" + encodeURIComponent(password));
+        }
+        </script>
         <!-- Modal for Displaying Stock Edit History -->
         <div id="stockHistoryModal" class="modal">
             <div class="modal-content-stocks">
-                <div class="flex" style="border-bottom:3px solid green;box-shadow:0 10px 10px rgba(0,0,0,0.2)">
-                    <img src="../Assets/view_img.png"
-                        style="width:100px;height:100px;margin-bottom:4px;text-align:center;margin-left:30px;">
-                </div>
                 <div id="historyContainer" style="margin-top:20px;">
                     <div class="history-item">
                         <div class="date-time"><strong>Date and Time:</strong> 2024-09-09 14:30</div>
@@ -1373,32 +1501,238 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                 include 'connection.php';
                 $sql = "SELECT id,  first_name, last_name, membership_type, total_cost, paid_status FROM members";
                 $result = $conn->query($sql);
-
-                ?>
-
+        ?>
         <div id="members" class="section hidden ">
-
             <!-- =====Search Form -->
-            <div class="search-container flex mt-10" style="margin-top:40px;">
-                <form method="GET" action="" class="flex">
-                    <input type="text" name="search" id="search" placeholder="Search by name" style="width:400px;
-                    height:50px;padding:10px;border:2px solid green;border-radius:10px"
+            <div class="search-container flex" style="margin-top:40px;margin-right:65px; justify-content: flex-end;">
+                <form method="GET" action="" class="flex" style="position:relative;">
+                    <input type="text" name="search" id="search" placeholder="Search by name"
+                        style="width:400px; height:50px;padding:10px;border:2px solid #009b7b;border-radius:10px"
                         value="<?php echo htmlspecialchars($searchQuery); ?>">
                     <img src="../Assets/search_icon.png"
-                        style="position:absolute;width:30px;height:30px;margin-left:15px;margin-top:8px;left:350px">
+                        style="position:absolute;width:30px;height:30px;margin-left:15px;margin-top:8px;left:340px">
                 </form>
             </div>
+            <style>
+            /* Pagination styles */
+            .pagination {
+                display: flex;
+                justify-content: center;
+                padding: 15px 0;
+                background-color: #eaeaea;
+                /* Light background for contrast */
+                border-radius: 8px;
+                /* Rounded corners */
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                /* Subtle shadow */
+            }
+
+            .page-item {
+                margin: 0 8px;
+            }
+
+            .page-link {
+                padding: 10px 15px;
+                background-color: #009B7B;
+                /* Theme color */
+                color: white;
+                border-radius: 5px;
+                text-decoration: none;
+                font-weight: bold;
+                /* Bold text for emphasis */
+                transition: background-color 0.3s, transform 0.2s;
+                /* Transition for smooth hover effect */
+            }
+
+            .page-link:hover {
+                background-color: #007a66;
+                /* Darker shade on hover */
+                transform: translateY(-2px);
+                /* Lift effect on hover */
+            }
+
+            .payment-button-container {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 30px;
+                /* Increased space above buttons */
+            }
+
+            .payment-button-container button {
+                flex: 1;
+                margin: 0 10px;
+                padding: 12px;
+                border: none;
+                border-radius: 20px;
+                /* Rounded corners */
+                cursor: pointer;
+                /* Pointer cursor on hover */
+                transition: background-color 0.3s, transform 0.2s;
+                /* Smooth transition */
+                font-weight: bold;
+                /* Bold text */
+                color: white;
+                /* White text for contrast */
+            }
+
+            .payment-button-container .mark-paid-button {
+                background-color: #009B7B;
+                /* Green for paid */
+            }
+
+            .payment-button-container .mark-debt-button {
+                background-color: #f44336;
+                /* Red for debt */
+            }
+
+            .payment-button-container button:hover {
+                opacity: 0.9;
+                /* Slightly transparent on hover */
+                transform: translateY(-2px);
+                /* Lift effect on hover */
+            }
+
+            /* Modal styles */
+            .modal-main {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                /* Semi-transparent background */
+                z-index: 999;
+                /* Ensure modal is on top */
+            }
+
+            .modal-content-main {
+                background-color: white;
+                /* White background for modal */
+                padding: 20px;
+                /* Padding for modal content */
+                border-radius: 8px;
+                /* Rounded corners */
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                /* Shadow for depth */
+                max-width: 400px;
+                /* Max width for modal */
+                width: 100%;
+                /* Full width */
+            }
+
+            .close {
+                cursor: pointer;
+                /* Pointer cursor for close button */
+                font-size: 24px;
+                /* Larger font for close */
+                color: #333;
+                /* Dark color for contrast */
+                float: right;
+                /* Align close button to the right */
+            }
+
+            #modalMemberName {
+                text-align: center;
+                /* Centered title */
+                color: #009B7B;
+                /* Theme color for title */
+                margin-bottom: 15px;
+                /* Space below title */
+            }
+
+            #cartItemsListView {
+                list-style: none;
+                /* Remove default list styling */
+                padding: 0;
+                /* Remove padding */
+            }
+            </style>
+
+            <div id="cartItemsModal" class="modal-main">
+                <div class="modal-content-main">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <h2 id="modalMemberName">Cart Items</h2>
+                    <ul id="cartItemsListView"></ul>
+                </div>
+            </div>
+
+
             <!-- =====Search Form -->
             <div id="membersList" class="grid-container">
                 <div class="green-circles flex">
                     <p>No members found</p>
                 </div>
-
             </div>
+            <div id="pagination" class="pagination-container"></div>
+
+
+            <style>
+            .modal-main {
+                display: none;
+                position: fixed;
+                z-index: 999;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgb(0, 0, 0);
+                background-color: rgba(0, 0, 0, 0.4);
+            }
+
+            .modal-content-main {
+                background-color: #fefefe;
+                margin: 15% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%;
+            }
+
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+
+            }
+
+            .pagination-container button {
+                padding: 8px 16px;
+                margin: 0 5px;
+                border: 1px solid #ccc;
+                background-color: #f1f1f1;
+                cursor: pointer;
+            }
+
+            .pagination-container button.active {
+                background-color: #4CAF50;
+                color: white;
+            }
+
+            .pagination-container button:hover {
+                background-color: #ddd;
+            }
+
+            .pagination-container {
+                display: flex;
+                justify-content: center;
+                margin-top: 20px;
+            }
+            </style>
 
             <!--===========Add Item Modal==================-->
             <div class="AddItemModal hiding" id="AddItemModal">
-                <div class="modal-content-add-item">
+                <div class="modal-content-add-item" style="margin-right:30px;margin-left:20px;">
                     <div class="left-aligned-content">
                         <!-- Search Input -->
                         <input type="text" class="search-item" id="searchInput" placeholder="Search products..."
@@ -1426,45 +1760,45 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                 while ($row = $result->fetch_assoc()) {
                     $image = $row['image'];
                     $productName = htmlspecialchars($row['ProductName']);
-                    // Format the price to two decimal places
                     $price = number_format((float)$row['Price'], 2, '.', '');
                     $stocks = htmlspecialchars($row['Stocks']);
                     $Id = sanitizeId(htmlspecialchars($row['id']));
                     $imgSrc = !empty($image) ? 'data:image/jpeg;base64,' . base64_encode($image) : 'path/to/default/image.jpg';
-
+            
                     // Highlight search term in product name
                     $highlightedName = $productName;
                     if ($searchTerm) {
                         $highlightedName = highlightSearchTerm($highlightedName, $searchTerm);
                     }
-
+            
                     // Determine if the product is out of stock
                     $outOfStockClass = ($stocks <= 0) ? 'out-of-stock-message' : 'hidden';
-
+                    $isOutOfStock = ($stocks <= 0) ? 'disabled' : '';
+            
                     echo "<div class='product-box' data-product-name='" . strtolower($productName) . "'>";
                     echo "<div class='bottom-line' style='border-bottom:2px solid green;width:100%;margin-bottom:17px;'>";
-
+            
                     echo "<div class='product-image-container'>
                             <div class='$outOfStockClass'>Out of Stock</div>
                             <img src='" . $imgSrc . "' alt='Product Image' class='product-image'>
                         </div>";
-
+            
                     echo "<h2>" . $highlightedName . "</h2>";
-
+            
                     // Price Container
                     echo "<div class='price-flex'>
                             <img src='../Assets/pesos.png' style='width:25px;height:25px;margin-top:10px;margin-right:7px;'>
                             <p class='price-text'>" . $price . "</p>
                         </div>";
                     echo "</div>";
-
+            
                     // Quantity Container
                     echo "<div class='quantity-container'>";
-                    echo "<button class='quantity-btn-minus' onclick='updateItemQuantity(\"$Id\", -1)'></button>";
+                    echo "<button class='quantity-btn-minus' onclick='updateItemQuantity(\"$Id\", -1)' $isOutOfStock></button>";
                     echo "<input type='text' id='quantity_$Id' class='quantity-input' value='1' readonly>";
-                    echo "<button class='quantity-btn-plus' onclick='updateItemQuantity(\"$Id\", 1)'></button>";
+                    echo "<button class='quantity-btn-plus' onclick='updateItemQuantity(\"$Id\", 1)' $isOutOfStock></button>";
                     echo "</div>";
-
+            
                     // Total Container
                     echo "<div class='total-container flex'>";
                     echo "<span class='total-label' style='margin-top:7px;font-size:17px;font-weight:bold;margin-right:13px;'>Total</span>";
@@ -1473,45 +1807,580 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                     echo "<span id='totalItem_" . $Id . "' data-price='" . $price . "' class='total-price'>" . $price . "</span>";
                     echo "</div>";
                     echo "</div>";
-
+            
                     // Add to Cart Button
-                    echo "<button class='add-to-cart-btn' onclick='addToCart(\"$Id\")'>Add Item</button>";
-
+                    echo "<button class='add-to-cart-btn' style='background-color:#009b7b !important;color:white !important;' onclick='addToCart(\"$Id\")' $isOutOfStock>Add Item</button>";
+            
                     echo "</div>";
                 }
             } else {
                 echo "<p>No products found</p>";
             }
-
             $conn->close();
             ?>
                     </div>
 
                 </div>
+                <div class="cart-display" id="cartDisplay" style="display: none;">
+                    <div class="close-button" onclick="closeCart()">&times;</div> <!-- Close button -->
+                    <h3><span id="memberNameDisplay"></span></h3>
+                    <ul id="cartItemsList">
+                        <!-- Cart items will be dynamically added here -->
+                    </ul>
+                    <div class="overflow:hidden">
+                        <strong style="font-size:20px;margin-right:20px;">Total</strong><span id="cartTotal"> P
+                            0.00</span>
+                    </div>
+                    <div class="flex">
+                        <div class="block staff-box">
+                            <h1 class="text-left" style="border-bottom: 1px solid #009B7B;color:#009B7B">Staff
+                            </h1>
+                            <h1 style="padding:5px;"><?php echo htmlspecialchars($firstName); ?>
+                                <?php echo htmlspecialchars($lastName); ?>
+                            </h1>
+                        </div>
+                    </div>
+                    <button onclick="submitCart()" class="confirm-order">Confirm Order</button>
+                </div>
 
             </div>
+
+            <style>
+            /* Staff Indicator */
+            .staff-box {
+                margin-top: 20px;
+                border: 1px solid #009B7B;
+                padding: 2px 20px 2px 20px;
+                text-align: center;
+                border-radius: 20px;
+
+                justify-content: center;
+            }
+
+            .confirm-order {
+                text-align: center;
+                display: flex;
+                justify-content: center;
+                margin: 0 auto;
+            }
+
+            button:disabled {
+                background-color: #ccc;
+                cursor: not-allowed;
+                opacity: 0.6;
+            }
+
+            .wrap-container {
+                display: flex;
+                justify-content: space-between;
+
+            }
+
+            .cart-display {
+                background-color: white;
+                width: 400px;
+                /* Adjust width as needed */
+                padding: 20px;
+                border-radius: 25px;
+                margin-top: 25px;
+                margin-right: 25px;
+                /* Spacing between product list and cart */
+                border-left: 2px solid #ddd;
+                /* Optional: add a border for separation */
+            }
+
+
+            /* When the cart is active, show it with animation */
+            .cart-display.active {
+                opacity: 1;
+                transform: translateY(0);
+                display: block;
+            }
+
+            /* Title and Member Name */
+            .cart-display h3 {
+                font-size: 24px;
+                /* Updated color */
+                text-align: center;
+                margin-bottom: 20px;
+                font-family: 'Arial', sans-serif;
+                letter-spacing: 1.5px;
+            }
+
+            /* Member Name Style */
+            #memberNameDisplay {
+                color: #009b7b;
+                /* Red color for member name */
+                font-weight: bold;
+                text-align: center;
+            }
+
+            /* Close Button */
+            .cart-close-btn {
+                font-size: 20px;
+                /* Size for close button */
+                color: red;
+                /* Red color for close button */
+                cursor: pointer;
+                /* Pointer on hover */
+                position: absolute;
+                /* Position it in the corner */
+                top: 15px;
+                /* Space from the top */
+                right: 15px;
+                /* Space from the right */
+            }
+
+            /* Cart Items List */
+            #cartItemsList {
+                list-style-type: none;
+                padding: 0;
+                margin: 20px 0;
+            }
+
+            .cart-display {
+                position: relative;
+                /* Position relative for absolute positioning of the close button */
+            }
+
+            .close-button {
+                position: absolute;
+                top: -5px;
+                right: 23px;
+                font-size: 30px;
+                color: red;
+                cursor: pointer;
+                z-index: 10;
+
+            }
+
+            .close-button:hover {
+                color: darkred;
+                /* Change color on hover for better UX */
+            }
+
+            /* Individual Cart Item */
+            #cartItemsList li {
+                font-size: 18px;
+                color: #333;
+                background: #f7f7f7;
+                margin: 10px 0;
+                padding: 10px;
+                border-radius: 10px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                transition: transform 0.2s;
+            }
+
+            /* Hover Effect on Cart Items */
+            #cartItemsList li:hover {
+                transform: translateY(-5px);
+            }
+
+            /* Cart Total */
+            #cartTotal {
+                font-size: 19px;
+                font-weight: bold;
+                color: #009b7b;
+                /* Updated color */
+                border-radius: 10px;
+
+                margin-top: 20px;
+            }
+
+            #cartTotal::before {
+                content: "P ";
+                width: 30px;
+                height: 40px;
+            }
+
+            /* Submit Cart Button */
+            .cart-display button {
+                background-color: #009b7b;
+                border: none;
+                padding: 10px 20px;
+                font-size: 18px;
+                color: #fff;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                margin-top: 20px;
+                box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .cart-display button:hover {
+                background-color: #33BBAF;
+            }
+
+            @keyframes pop-in {
+                0% {
+                    transform: scale(0.9);
+                    opacity: 0;
+                }
+
+                100% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+            }
+
+            .cart-display.active ul li {
+                animation: pop-in 0.3s ease forwards;
+            }
+            </style>
+            <script>
+            function closeCart() {
+                document.getElementById("cartDisplay").style.display = "none"; // Hide the cart display
+            }
+            </script>
+
+
+
+
+
+
             <!----==================Main Container OF THE SECTIONS ENDPOINT=================-->
         </div>
-        <!--==========================EXPENSES SECTION =============================-->
         <div class="section hidden" id="Expenses">
-            <div class="expense">
-                <img src="../Assets/expense_bg.png">
+            <div id="infoBox" class="mb-4 flex justify-between items-center mt-6">
+                <h1 class="text-lg text-[#124137] font-bold">Expenses</h1>
+                <div class="flex items-center" style="margin-bottom:10px;">
+                    <button onclick="window.location.href='export.php'"
+                        class="export-excel text-black font-bold justify-end"
+                        style="border:2px solid #009B7B; color: #009B7B;background-color:white;border-radius:10px;padding:9px 45px 9px 45px;margin-right:20px;margin-top:7px;">
+                        Export to Excel
+                    </button>
+                    <button id="showFormButton"
+                        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300"
+                        style="letter-spacing: 1px;" onclick="showModalExpenses()">
+                        Add New Expense
+                    </button>
+                </div>
             </div>
-            <div id="infoBox">
-                <button id="showFormButton">Add Expense</button>
-            </div>
-            <div id="expenseFormContainer" class="hidden">
-                <img onclick="backHistory()" src="../Assets/back_arrow.png" class="expense-back">
 
-                <form id="expenseForm">
-                    <label for="description">Description:</label>
-                    <input type="text" id="description" name="description" required>
-                    <label for="amount">Amount:</label>
-                    <input type="number" id="amount" name="amount" step="0.01" required>
-                    <button type="submit">Add Expense</button>
-                </form>
+            <div class="filter-container" style="margin-bottom:20px;">
+                <label for="startDate" style="margin-right:25px;">Expense Date</label>
+                <input type="date" id="startDate" name="startDate"
+                    class="border border-gray-300 rounded-md shadow-md p-2">
+
+                <label for="staffName" style="margin-right:25px;margin-left:25px;">Staff Name</label>
+                <input type="text" id="staffName" name="staffName" placeholder="Enter staff name"
+                    class="border border-gray-300 rounded-md shadow-md p-2">
+
+                <!-- Filter Button -->
+                <button onclick="applyFilters()"
+                    class="bg-blue-600 text-black px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300"
+                    style="background-color:#009B7B;color:white;margin-left:25px;">Search</button>
+
+                <!-- Clear Button -->
+                <button onclick="clearFilters()"
+                    class="bg-gray-400 text-red-600 px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300"
+                    style="background-color:red;color:white;margin-left:25px;">Clear</button>
+            </div>
+
+
+
+            <div id="expenseTableContainer" class="mt-4"
+                style="border-radius:15px !important; border:1px solid transparent!important;">
+                <table id="expenseTable" class="min-w-full border-collapse border"
+                    style="border:1px solid transparent!important;">
+                    <thead style="background-color:#FAFAFA;padding-top:20dp;padding-bottom:20dp;">
+                        <tr style="background-color:#FAFAFA;padding-top:20dp;padding-bottom:20dp;">
+                            <th class="border border-gray-300 px-4 py-2 text-left">Date</th>
+                            <th class="border border-gray-300 px-4 py-2 text-left">Proof</th>
+                            <th class="border border-gray-300 px-4 py-2 text-left">Expense Name</th>
+                            <th class="border border-gray-300 px-4 py-2 text-left">Type</th>
+                            <th class="border border-gray-300 px-4 py-2 text-left">Supplier</th>
+                            <th class="border border-gray-300 px-4 py-2 text-left">Amount</th>
+                            <th class="border border-gray-300 px-4 py-2 text-left">Added By</th>
+                            <th class="border border-gray-300 px-4 py-2 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows will be populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+
+
+
+            <!-- Modal Container -->
+            <div id="modal-expenses" class="modal-expenses hidden">
+                <div id="modal-content-expenses" class="modal-content-expenses p-6 w-4/5 mx-auto relative">
+                    <h2 class="text-2xl font-bold mb-6" style="margin-bottom:25px;">Add New Expense</h2>
+
+                    <form id="expenseForm" class="space-y-6" enctype="multipart/form-data" method="POST">
+                        <div class="block w-full">
+                            <label for="description" class="block text-sm font-medium text-gray-700">Expense
+                                Name <span style="color:red">*</span></label>
+                            <input type="text" id="description" name="description" required
+                                class="mt-1 block w-full border-2 border-gray-300 rounded-md shadow-md focus:border-blue-500 focus:ring focus:ring-blue-200 p-2"
+                                style="font-size:18px">
+                        </div>
+                        <label for="imageUpload" style="margin-top:20px;"
+                            class="block text-sm font-medium text-gray-700">Image <span
+                                style="color:red">*</span></label>
+                        <div class="flex w-full border-2 border-gray-300 rounded-md shadow-md mt-6 p-2">
+                            <label for="imageUpload" id="fileLabel" class="block text-sm font-medium text-gray-700 mr-2"
+                                style="white-space:nowrap;width:200px;margin-top:5px;cursor:pointer">Choose
+                                file</label>
+                            <div class="flex items-center border border-gray-300 rounded-md shadow-md p-2 w-full">
+                                <input type="file" id="imageUpload" name="imageUpload" accept="image/*" class="hidden"
+                                    onchange="displayFileName(this)">
+                                <img src="../Assets/attachment.png" alt="Clip" class="cursor-pointer w-6 h-6 ml-2"
+                                    onclick="document.getElementById('imageUpload').click()">
+                                <span id="fileName" class="ml-2 text-gray-700 hidden">No file chosen</span>
+                            </div>
+                        </div>
+
+                        <script>
+                        function displayFileName(input) {
+                            const fileName = input.files[0]?.name;
+                            if (fileName) {
+                                document.getElementById('fileLabel').textContent =
+                                    fileName;
+                                document.getElementById('fileName').classList.add(
+                                    'hidden');
+                            }
+                        }
+                        </script>
+
+                        <div>
+                            <label for="type" class="block text-sm font-medium text-gray-700">Type <span
+                                    style="color:red">*</span></label>
+                            <input type="text" id="type" name="type" required
+                                class="mt-1 block w-full border-2 border-gray-300 rounded-md shadow-md focus:border-blue-500 focus:ring focus:ring-blue-200 p-2">
+                        </div>
+
+                        <div class="flex justify-between">
+                            <div class="w-full mr-10 pr-2" style="margin-right:10px;">
+                                <label for="supplier" class="block text-sm font-medium text-gray-700">Supplier
+                                    <span style="color:red">*</span></label>
+                                <input type="text" id="supplier" name="supplier" required
+                                    class="mt-1 block w-full border-2 border-gray-300 rounded-md shadow-md focus:border-blue-500 focus:ring focus:ring-blue-200 p-2">
+                            </div>
+
+                            <div class="w-full ml-10">
+                                <label for="amount" class="block text-sm font-medium text-gray-700">Amount <span
+                                        style="color:red">*</span></label>
+                                <input type="number" id="amount" name="amount" step="0.01" required
+                                    class="mt-1 block w-full border-2 border-gray-300 rounded-md shadow-md focus:border-blue-500 focus:ring focus:ring-blue-200 p-2">
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center mt-4">
+                            <button type="button" id="cancelButton1" class="cancel-button1"
+                                onclick="closeModalExpenses()">Cancel</button>
+                            <button type="submit" id="addButton1" class="add-button1">Add</button>
+                        </div>
+                    </form>
+
+                </div>
             </div>
         </div>
+        <!-- Modal for verify Password -->
+        <div id="modal-verify-password" class="modal-expenses" style="display:none;">
+            <div class="modal-background" onclick="closeVerifyModal()"></div>
+            <div class="modal-content-view-expense1">
+                <img src="../Assets/verify.png" class="text-center justify-center align-center">
+                <h3 class="modal-title" style="font-size:20px">Verify Password</h3>
+                <input type="password" id="verification-password" placeholder="Enter your password" class="input"
+                    required />
+                <div id="error-message" style="color: red; display: none;">Invalid password. Please try again.
+                </div>
+                <div class="flex">
+                    <button class="button is-primary confirm-delete-btn"
+                        style="flex: 1; white-space: nowrap; margin-right: 10px;"
+                        onclick="closeVerifyModal()">Cancel</button>
+                    <button class="button is-primary confirm-delete-btn" id="confirm-delete-btn"
+                        style="flex: 1; white-space: nowrap;" onclick="confirmDelete()">Confirm</button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal for viewing expense Data -->
+        <div id="modal-view-expense1" class="modal-expenses" style="display:none;">
+            <div class="modal-background" onclick="closeModal()"></div>
+            <div class="modal-content-view-expense1">
+                <img id="modalImage" alt="Expense Image" class="modal-image" />
+                <div class="modal-details">
+                    <div class="modal-title" id="modalTitle"></div>
+                    <div class="modal-date" id="modalDate"></div>
+                    <div class="modal-type" id="modalType"></div>
+                    <div class="modal-supplier" id="modalSupplier"></div>
+                    <div class="modal-amount" id="modalAmount"></div>
+                </div>
+                <button class="button is-primary" onclick="closeView()">Close</button>
+            </div>
+        </div>
+        <script>
+        function closeView() {
+            document.getElementById('modal-view-expense1').style.display = "none";
+        }
+        </script>
+        <style>
+        .confirm-delete-btn {
+            background-color: lightcoral;
+            /* Keep the background color */
+            white-space: nowrap;
+            /* Prevent text wrapping */
+            font-size: 12px;
+            /* Set font size */
+            width: 200px;
+            /* Make button full width */
+            display: block;
+            /* Ensure it behaves like a block element */
+            margin-top: 10px;
+            /* Add some spacing if needed */
+        }
+
+        #confirm-delete-btn {
+            font-weight: bold;
+
+        }
+
+        #confirm-delete-btn:hover {
+            font-weight: bold;
+            background-color: red;
+            transition: .5s;
+
+        }
+
+        .modal-content-view-expense1 {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 5% auto;
+            max-width: 500px;
+            /* Keep the same max-width */
+            width: 90%;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.5s;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .modal-title {
+            color: #009B7C;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .button {
+            margin-top: 10px;
+        }
+
+        .modal-image {
+            border-radius: 12px;
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-details {
+            background-color: #f9f9f9;
+            padding: 15px;
+            text-align: left;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+
+        .modal-date,
+        .modal-type,
+        .modal-supplier,
+        .modal-amount {
+            color: #333;
+            font-size: 1rem;
+            margin: 5px 0;
+        }
+
+        .button.is-primary {
+            background-color: #009B7C;
+            /* Button color */
+            color: #fff;
+            padding: 10px 80px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .button.is-primary:hover {
+            background-color: #007B5F;
+            /* Darker color on hover */
+        }
+        </style>
+
+        <script>
+        function showModalExpenses() {
+            const modal = document.getElementById('modal-expenses');
+            modal.classList.remove('hidden');
+            modal.style.display = "flex";
+        }
+
+        function closeModalExpenses() {
+            const modal = document.getElementById('modal-expenses');
+            modal.classList.add('hidden');
+            modal.style.display = "none";
+        }
+        </script>
+        <style>
+        .cancel-button1,
+        .add-button1 {
+            width: 120px;
+            margin-top: 50px;
+            height: 40px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 16px;
+            padding: 12px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .cancel-button1 {
+            background-color: white;
+            color: black;
+            border: 1.2px solid #A2A1A8;
+            margin-right: 20px;
+        }
+
+        .cancel-button1:hover {
+            background-color: #A2A1A8;
+            color: #007d62;
+        }
+
+        .add-button1 {
+            background-color: #009B7B;
+            color: white;
+        }
+
+        .add-button1:hover {
+            background-color: #007d62;
+        }
+        </style>
 
         <!--==========================EXPENSES SECTION =============================-->
         <!--=============Loading Animation-->
@@ -1521,6 +2390,7 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
         <!--=============Loading Animation-->
         <script src="../JS/dashboard.js"></script>
         <script src="../JS/logout.js"></script>
+        <script src="../JS/sales.js"></script>
         <script src="../JS/stocks.js"></script>
         <script src="../JS/product.js"></script>
         <script src="../JS/add_member.js"></script>
@@ -1528,9 +2398,9 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
         <script src="../JS/members.js"></script>
         <script src="../JS/showSettings.js"></script>
         <script src="../JS/profile.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="../JS/update_file_product.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/1.9.3/countUp.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.0.2/index.min.js"></script>
         <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -1565,10 +2435,9 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
                     responsive: true,
                     maintainAspectRatio: false,
                     animation: {
-                        duration: 1000, // Duration of animation in milliseconds
-                        easing: 'linear', // Linear easing function
-                        animateRotate: true, // Rotate the chart during animation
-                        animateScale: true // Scale the chart during animation
+                        duration: 1000,
+                        animateRotate: true,
+                        animateScale: true
                     },
                     plugins: {
                         legend: {
@@ -1596,6 +2465,8 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
             });
         });
         </script>
+        <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/dist/index.global.min.js'></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/progressbar.js@1.1.0/dist/progressbar.min.js"></script>
 
 </body>
