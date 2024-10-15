@@ -112,10 +112,15 @@
         margin-top: 10px;
         margin-bottom: -20px;
     }
+
+    .btn-primary {
+        background-color: #009B7B !important;
+    }
     </style>
 </head>
 
 <body>
+
     <div id="spinnerOverlay" style="display: none;">
         <div class="block">
             <div class="text-center bg-white shadow-md flex align-center" class="redirect-message"
@@ -149,8 +154,7 @@
                             class="block w-full px-4 py-3 text-sm border-2 border-gray-200 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                             required placeholder="Enter your email address" style="margin-top:5px !important;">
                     </div>
-                    <button type="submit" id="find-email-button" class="btn-primary"
-                        style="background-color:#009B7B!important">Find Email</button>
+                    <button type="submit" id="find-email-button" class="btn-primary">Find Email</button>
                 </div>
             </form>
 
@@ -162,6 +166,11 @@
                     <!-- Profile container will be dynamically inserted here -->
                 </div>
                 <div id="options" class="block gap-x-4">
+                    <div id="spinnerOverlaySelectOption" style="display: none;">
+                        <div class="block justify-center align-center align-content-center">
+                            <h1 class="text-black font-bold mt-1 text-select-option">Pls Select An Option</h1>
+                        </div>
+                    </div>
                     <div class="mb-3" style="margin-bottom:10px;">
                         <label class="radio-label">
                             <input type="radio" name="action" value="enterPassword">
@@ -175,13 +184,12 @@
                         </label>
                     </div>
                 </div>
-                <button id="proceed-button" class="btn-primary"
-                    style="background-color:#009B7B!important">Proceed</button>
+                <button id="proceed-button" class="btn-primary">Proceed</button>
             </div>
         </div>
 
         <!-- Login Form -->
-        <div id=" login-form-container" class="hidden">
+        <div id="login-form-container" class="hidden">
             <img id="back-button2" src="../Assets/back_arrow.png" onclick="backButton()"
                 style="width:25px;height:25px;cursor:pointer;margin-bottom:15px;">
             <form id="login-form">
@@ -199,7 +207,6 @@
                             class="block w-full px-4 py-3 text-sm border-2 border-gray-200 rounded-md shadow-sm"
                             required placeholder="Enter your password">
                     </div>
-                    <div id="login-error-message" class="message message-error hidden"></div>
                     <button type="submit" id="proceed-login" class="btn-primary">Proceed</button>
                 </div>
             </form>
@@ -244,13 +251,14 @@
             findEmailButton.classList.add('hidden');
             errorMessageDiv.classList.add('hidden');
 
-            const profileImage = data.profileImage ? `data:image/jpeg;base64,${data.profileImage}` : '';
-            const profileImageHtml = profileImage ?
-                `<img src="${profileImage}" alt="Profile Image" class="profile-image" style="width:60px;height:60px;">` :
-                '';
+            // Use default profile image if 'default' is returned
+            const profileImage = data.profileImage === 'default' ? '../Assets/profile.png' :
+                `data:image/jpeg;base64,${data.profileImage}`;
+            const profileImageHtml =
+                `<img src="${profileImage}" alt="Profile Image" class="profile-image" style="width:60px;height:60px;">`;
             const emailHtml = `<div class="profile-info">
-                               <div class="profile-email"> ${data.email}</div>
-                            </div>`;
+                           <div class="profile-email"> ${data.email}</div>
+                        </div>`;
 
             resultMessage.innerHTML =
                 `<div class="profile-container">${profileImageHtml}${emailHtml}</div>`;
@@ -263,16 +271,20 @@
         }
     });
 
+
     document.getElementById('proceed-button').addEventListener('click', async function() {
         const selectedAction = document.querySelector('input[name="action"]:checked');
         if (!selectedAction) {
-            alert('Please select an option.');
+            document.getElementById('spinnerOverlaySelectOption').style.display = "block";
+
+            setTimeout(function() {
+                document.getElementById('spinnerOverlaySelectOption').style.display = "none";
+            }, 4000);
             return;
         }
 
         const email = document.getElementById('email').value;
         const action = selectedAction.value;
-
         const resultMessage = document.getElementById('result-message');
         const sendingGif = document.getElementById('sending-gif');
         const loginFormContainer = document.getElementById('login-form-container');
@@ -294,10 +306,12 @@
                 loginFormContainer.classList.remove('hidden');
 
                 document.getElementById('login-email').value = data.email;
-                const profileImage = data.profileImage ? `data:image/jpeg;base64,${data.profileImage}` : '';
-                const profileImageHtml = profileImage ?
-                    `<img src="${profileImage}" alt="Profile Image" class="profile-image" style="width:60px;height:60px;">` :
-                    '';
+
+                // Use default profile image if 'default' is returned
+                const profileImage = data.profileImage === 'default' ? '../Assets/profile.png' :
+                    `data:image/jpeg;base64,${data.profileImage}`;
+                const profileImageHtml =
+                    `<img src="${profileImage}" alt="Profile Image" class="profile-image" style="width:60px;height:60px;">`;
                 document.getElementById('login-profile-image').innerHTML = profileImageHtml;
             } else {
                 alert('Email not found.');
@@ -366,13 +380,6 @@
         const data = await response.json();
 
         if (data.success) {
-            // Display success message
-            loginErrorMessageDiv.innerHTML = '<div style="display: flex; align-items: center;">' +
-                '<img src="../Assets/success_message.png" alt="Success" style="width:30px; height:30px; margin-right:10px;">' +
-                `<span>${data.message}</span>` +
-                '</div>';
-            loginErrorMessageDiv.classList.remove('hidden');
-
             // Delay before showing spinner overlay
             setTimeout(function() {
                 spinnerOverlay.style.display = "flex";

@@ -129,7 +129,7 @@ function attachActionButtonListeners() {
 
 function setupSearch() {
   const searchInput = document.getElementById("search");
-  const membersList = document.getElementById("membersList");
+  const membersList = document.querySelector("#membersList tbody");
 
   async function fetchMembers(query) {
     try {
@@ -144,7 +144,7 @@ function setupSearch() {
   }
 
   function displayMembers(members) {
-    membersList.innerHTML = ""; // Clear existing members
+    membersList.innerHTML = "";
 
     const memberItemsMap = new Map();
 
@@ -175,107 +175,72 @@ function setupSearch() {
       }
     });
 
-    const uniqueMembers = new Set();
-
     members.forEach((row) => {
-      if (!uniqueMembers.has(row.id)) {
-        uniqueMembers.add(row.id);
-        const memberBox = document.createElement("div");
-        memberBox.className = "member-box";
-        memberBox.innerHTML = generateMemberBoxHTML(row, memberItemsMap);
-        membersList.appendChild(memberBox);
-      }
+      const tr = document.createElement("tr");
+      tr.innerHTML = generateMemberRowHTML(row, memberItemsMap);
+      membersList.appendChild(tr);
     });
 
     attachActionButtonListeners();
   }
 
-  function generateMemberBoxHTML(row, memberItemsMap) {
+  function generateMemberRowHTML(row, memberItemsMap) {
     const itemsHtml = (memberItemsMap.get(row.id) || [])
       .map(
-        (item) =>
-          `<li>${highlightText(
-            item.product_name,
-            searchInput.value
-          )} - ${formatNumber(item.total_quantity)} units, $${formatNumber(
-            item.total_price
-          )} ${
-            item.stock <= 0
-              ? '<span class="out-of-stock">Out of Stock</span>'
-              : ""
-          }</li>`
+        (item) => `
+              <li>${highlightText(item.product_name, searchInput.value)} - 
+                  ${formatNumber(item.total_quantity)} units, 
+                  $${formatNumber(item.total_price)} 
+                  ${
+                    item.stock <= 0
+                      ? '<span class="out-of-stock">Out of Stock</span>'
+                      : ""
+                  }
+              </li>`
       )
       .join("");
 
     return `
-      <div class="member-header">
-        <img src="../Assets/profile_default.png" class="profile-pic" alt="Profile Picture" />
-        <div class="name-status">
-          <div class="name">${highlightText(
+          <td>
+              <img src="../Assets/profile_default.png" class="profile-pic" alt="Profile Picture" style="width:50px;height:50px;"/>
+          </td>
+          <td>${highlightText(
             row.first_name + " " + row.last_name,
             searchInput.value
-          )}</div>
-          <div class="status-container">
-            ${
-              row.paid_status === "not paid"
-                ? `<div class="status not-paid flex"><img src="../Assets/not-paid.png"><span>Not Paid</span></div>`
-                : `<div class="status paid flex"><img src="../Assets/paid.png"><span>Paid</span></div>`
-            }
-            <button class="action-button" style="margin-top:-16px;">
-              <img src="../Assets/action.png" alt="Actions" style="width:45px;height:45px;">
-            </button>
-            <div class="action-menu hidden" data-member-id="${row.id}">
-              <button class="delete-button button1 "  style='background-color:red !important'data-action="delete">
-                <svg viewBox="0 0 448 512" class="svgIcon">
-                  <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path>
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="membership-data">
-        <p class="membership-text">Membership</p>
-        <div class="flex m-flex">
-          <span class="membership-type-text">${highlightText(
-            row.membership_type,
-            searchInput.value
-          )}</span>
-          <div class="flex">
-            <img src="../Assets/pesos.png" style="width:30px;height:30px;" />
-            <span style='margin-top:5px;' id="membership_cost_${
-              row.id
-            }">${formatNumber(row.total_cost)}.00</span>
-          </div>
-        </div>
-      </div>
-   <div class="action-buttons flex justify-between mt-4">
-        <button style='background-color: #009B7B;color:white;' class="add-item-button bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600" onclick="ViewItems('${
-          row.id
-        }')">View Items</button>
-        <button style='background-color: #009B7B;color:white;' class="add-item-button bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600" onclick="ShowItems('${
-          row.id
-        }')">Add More Item</button>
-    </div>
-      <p class="item-text">Total</p>
-      <div class="total-cost"'">
-        <div class="cost">
-          <div class="flex">
-            <img src="../Assets/pesos.png" style="width:30px;height:30px;margin-right:8px;" />
-            <span style='margin-top:4px;' id="total_${row.id}">${formatNumber(
-      row.total_cost
-    )}.00</span>
-          </div>
-        </div>
-        <div class="payment-actions">
-          ${
-            row.paid_status === "not paid"
-              ? `<button class="mark-paid-button">Mark as Paid</button>`
-              : `<button class="mark-unpaid-button">Mark as Unpaid</button>`
-          }
-        </div>
-      </div>
-    `;
+          )}</td>
+          <td>${highlightText(row.membership_type, searchInput.value)}</td>
+          <td>
+              <div class="flex">
+                  <img src="../Assets/pesos.png" style="width:20px;height:20px;margin-right:5px;">
+                  <span>${formatNumber(row.total_cost)}.00</span>
+              </div>
+          </td>
+          <td>
+              ${
+                row.paid_status === "not paid"
+                  ? `<div class="status not-paid">Not Paid</div>`
+                  : `<div class="status paid">Paid</div>`
+              }
+          </td>
+       
+          <td>
+              <button class="add-item-button" onclick="ViewItems('${
+                row.id
+              }')"> Items</button>
+              <button class="add-item-button" onclick="ShowItems('${
+                row.id
+              }')">Add Items</button>
+          </td>
+             <td>
+        
+              
+              <div class="action-menu" data-member-id="${row.id}">
+                  <button class="delete-button" data-action="delete" ">
+                      <img src="../Assets/delete_icon.png">
+                  </button>
+              </div>
+          </td>
+      `;
   }
 
   function formatNumber(number) {
@@ -288,6 +253,8 @@ function setupSearch() {
 
   fetchMembers(""); // Initialize with no search query
 }
+
+setupSearch();
 
 // Modify the existing ViewItems function
 async function ViewItems(memberId) {
@@ -814,14 +781,54 @@ function filterProducts() {
   }
 }
 
-// Function to highlight text in search results
 function highlightText(text, query) {
   if (!query) return text;
   const regex = new RegExp(`(${query})`, "gi");
   return text.replace(regex, '<mark class="highlight">$1</mark>');
 }
 
-// Add event listener for product filter
 document
   .getElementById("searchInput")
   .addEventListener("input", filterProducts);
+
+//=====Selecting all members doughnut chart
+
+if (typeof membershipData !== "undefined") {
+  const labels = Object.keys(membershipData);
+  const data = Object.values(membershipData);
+
+  //========= Create the chart
+  const ctx = document.getElementById("membershipPieChart").getContext("2d");
+  const membershipPieChart = new Chart(ctx, {
+    type: "pie",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          data: data,
+          backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#009b7b"],
+          hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#009b7b"],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top",
+        },
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              const label = context.label || "";
+              const value = context.raw || 0;
+              return `${label}: ${value} members`;
+            },
+          },
+        },
+      },
+    },
+  });
+} else {
+  console.error("No membership data available!");
+}

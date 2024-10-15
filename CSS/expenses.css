@@ -365,3 +365,22 @@ label {
   justify-content: space-between;
   margin-top: 20px;
 }
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.pagination-button {
+  background-color: #007bff; /* Bootstrap primary color */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.pagination-button:disabled {
+  background-color: #ccc; /* Gray color for disabled button */
+  cursor: not-allowed;
+}

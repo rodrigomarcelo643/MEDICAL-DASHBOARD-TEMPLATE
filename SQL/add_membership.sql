@@ -9,6 +9,7 @@ CREATE TABLE members (
     membership_start DATE NOT NULL,
     membership_due_date DATE NOT NULL,
     total_cost VARCHAR(255) NOT NULL,
+    added_by VARCHAR(255) NOT NULL,
     birthdate DATE NOT NULL,
     profile_picture LONGBLOB NOT NULL,
     email VARCHAR(255) NOT NULL, 

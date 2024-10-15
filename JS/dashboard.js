@@ -1,4 +1,4 @@
-// ==========================Function to show a specific section
+// Function to show a specific section
 function showSection(sectionId, initialLoad = false) {
   const sections = document.querySelectorAll(".section");
   const sidebarItems = document.querySelectorAll(".sidebar-item");
@@ -19,6 +19,13 @@ function showSection(sectionId, initialLoad = false) {
     Expenses: "../Assets/expenses_main.png",
   };
 
+  const sectionToShow = document.getElementById(sectionId);
+
+  // If the section is already visible, exit the function early
+  if (sectionToShow && !sectionToShow.classList.contains("hidden")) {
+    return; // Exit early if the section is already active
+  }
+
   showLoadingSpinner();
 
   const loadTime = getEstimatedLoadTime();
@@ -38,7 +45,6 @@ function showSection(sectionId, initialLoad = false) {
       }
     });
 
-    const sectionToShow = document.getElementById(sectionId);
     if (sectionToShow) {
       sectionToShow.classList.remove("hidden");
       sectionToShow.classList.add("show");
@@ -57,9 +63,36 @@ function showSection(sectionId, initialLoad = false) {
       }
     }
 
+    // Save the active section ID in localStorage
+    localStorage.setItem("activeSection", sectionId);
+
+    // Update the URL hash to reflect the active section
+    window.location.hash = sectionId;
+
     hideLoadingSpinner();
   }, loadTime);
 }
+
+// Function to initialize the active section on page load
+function initializeActiveSection() {
+  const activeSection = localStorage.getItem("activeSection");
+
+  // Check if there's a hash in the URL
+  const hash = window.location.hash.substring(1); // Remove the '#' from the hash
+
+  // Use the hash if it exists; otherwise, use the stored section or default
+  if (hash) {
+    showSection(hash, true);
+  } else if (activeSection) {
+    showSection(activeSection, true);
+  } else {
+    // Optionally, show a default section if none is saved
+    showSection("dashboard", true); // Change "dashboard" to your default section
+  }
+}
+
+// Call the initialization function when the page loads
+window.onload = initializeActiveSection;
 
 // ==========================Function to get estimated load time based on network conditions
 function getEstimatedLoadTime() {

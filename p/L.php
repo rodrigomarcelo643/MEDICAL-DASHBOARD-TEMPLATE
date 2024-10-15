@@ -20,14 +20,14 @@
         <div class="block">
 
 
-            <div class="w-full max-w-full bg-white p-8 rounded-lg shadow-lg" style="width:500px;max-width:500px;">
+            <div class="w-full max-w-full bg-white p-8 rounded-lg shadow-lg" style="width:400px;max-width:400px;">
                 <div class="flex ml-4 justify-center mb-4">
                     <img src="../Assets/logo.png" style="width:120px;height:100px;">
                 </div>
                 <div class="text-center mb-6">
                     <div class=" text-black p-4 rounded-lg flex items-center justify-left mb-4 "
                         style="margin-left:-16px;">
-                        <span class="text-lg font-bold" style="font-size:25px">Welcome Staff 👋</span>
+
                     </div>
                 </div>
 
@@ -55,7 +55,7 @@
                     <div class="flex items-center mb-4">
                         <input type="checkbox" id="rememberMe" class="mr-2">
                         <p class="remember" for="rememberMe" class="text-gray-700 text-sm">Remember Me</p>
-                        <a href="sF.php" class=" forgot hover:underline ml-40 text-sm" style="margin-left:200px">Forgot
+                        <a href="sF.php" class=" forgot hover:underline ml-40 text-sm" style="margin-left:100px">Forgot
                             your
                             password?</a>
                     </div>

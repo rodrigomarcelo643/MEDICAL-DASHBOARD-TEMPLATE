@@ -17,7 +17,7 @@ document
     buttonText.textContent = "Signing In...";
     submitButton.disabled = true;
     spinnerContainer.classList.remove("hidden");
-    submitButton.style.backgroundColor = "#0aa2bd";
+    submitButton.style.backgroundColor = "#009B7B";
 
     var formData = new FormData(this);
     var xhr = new XMLHttpRequest();

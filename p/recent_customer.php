@@ -48,13 +48,13 @@ if ($result->num_rows > 0) {
             $totalCost = number_format((float)$row['total_cost'], 2, '.', '');
 
             // Output row
-            echo "<tr>";
-            echo "<td class='border px-4 py-2'>" . htmlspecialchars($row['membership_type']) . "</td>";
-            echo "<td class='border px-4 py-2 flex items-center'>
+            echo "<tr style='background-color:white!important'>";
+            echo "<td class='px-4 py-2'>" . htmlspecialchars($row['membership_type']) . "</td>";
+            echo "<td class='px-4 py-2 flex items-center'>
                     <img src='../Assets/default_profile_image.png' style='margin-right:10px;' class='w-8 h-8 inline-block rounded-full' alt='Profile Image'>
                     " . htmlspecialchars($row['first_name']) . " " . htmlspecialchars($row['last_name']) . "
                   </td>";
-            echo "<td class='border px-4 py-2'>
+            echo "<td class=' px-4 py-2'>
                     <div class='flex items-center'>
                       <img src='../Assets/pesos.png' style='width: 20px; height: 20px;' class='mr-2' alt='Money Icon'>
                       <span style='color: $color;'>" . htmlspecialchars($totalCost) . "</span>

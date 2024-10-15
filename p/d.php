@@ -26,6 +26,7 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
     <link href="../CSS/Products.css" rel="stylesheet">
     <link href="../CSS/notif.css" rel="stylesheet">
     <link href="../CSS/add_member.css" rel="stylesheet">
+    <link href="../CSS/pagination.css" rel="stylesheet">
     <link href="../CSS/expenses.css" rel="stylesheet">
     <link href="../CSS/profile.css" rel="stylesheet">
     <link rel="icon" href="../Assets/Yokoks_logo.png">
@@ -35,6 +36,7 @@ $profileImage = isset($_SESSION['profileImage']) ? $_SESSION['profileImage'] : '
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.0.2/index.min.css" />
     <title>Cebu City Branch | Staff Dashboard</title>
     <link href="../CSS/showSettings.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Inter" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -569,7 +571,7 @@ function toggleSidebar1() {
             alt="Toggle Sidebar" style="margin-left:200px;width:33px;height:23px;" onclick="toggleSidebar1()">
         </span>
         <h1 class="text-left branch-title"
-            style="flex: 1;font-size:21px;color:#737791!important;font-weight:bold;color:green;text-align:left;margin-left: 30px;">
+            style="flex: 1;font-size:21px;font-weight:bold;color:#124137;text-align:left;margin-left: 30px;">
             Cebu City Branch
         </h1>
 
@@ -601,7 +603,7 @@ function toggleSidebar1() {
     }
 
     /* For smaller screens */
-    @media (max-width: 768px) {
+    @media only screen and (max-width: 768px) {
         .branch-title {
             font-size: 20px;
             text-align: center;
@@ -673,17 +675,18 @@ function toggleSidebar1() {
             <span class="text-[15px] font-bold" style="margin-left:10px">Dashboard</span>
         </div>
         <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer sidebar-item"
-            data-section="products" onclick="showSection('products')">
-            <img src="../Assets/products_main.png" class="sidebar-icon" alt="Dashboard"
-                style="width: 20px; height: 20px; object-fit: contain;">
-            <span class="text-[15px] font-bold" style="margin-left:10px">Products</span>
-        </div>
-        <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer sidebar-item"
             data-section="membership" onclick="showSection('membership')">
             <img src="../Assets/membership_main.png" class="sidebar-icon" alt="Dashboard"
                 style="width: 20px; height: 20px; object-fit: contain;">
             <span class="text-[15px] font-bold" style="margin-left:10px">Membership</span>
         </div>
+        <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer sidebar-item"
+            data-section="products" onclick="showSection('products')">
+            <img src="../Assets/products_main.png" class="sidebar-icon" alt="Dashboard"
+                style="width: 20px; height: 20px; object-fit: contain;">
+            <span class="text-[15px] font-bold" style="margin-left:10px">Products</span>
+        </div>
+
         <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer sidebar-item"
             data-section="sendSales" onclick="showSection('sendSales')">
             <img src="../Assets/reports_main.png" class="sidebar-icon" alt="Dashboard"
@@ -722,7 +725,7 @@ function toggleSidebar1() {
                     style="margin-right:30px;margin-bottom:30px;border-radius:25px;">
                     <div class="flex flex-col items-center justify-start w-full p-4">
                         <div class="flex items-center justify-between w-full mb-4">
-                            <p class="text-lg font-semibold">Overall Sales</p>
+                            <p class="text-lg font-semibold">Product Sales</p>
                             <div id="percentage-border"
                                 class="percentage-border flex items-center justify-center rounded-full h-16 w-16">
                                 <span id="percentage-text1" style="font-size:12px;margin-top:-5px;"
@@ -796,27 +799,27 @@ function toggleSidebar1() {
             <!--=====================Boxes Sales Report ====================================-->
 
             <!-- Container for Doughnut Chart and Statistics -->
-            <div class="flex flex-chart" style="border-bottom:3px solid green; border-top:3px solid green; height:auto">
-                <div class="flex overflow-hidden"
-                    style="margin-top:35px; overflow:hidden; z-index:1; margin-left:100px;border-right: 3px solid green;margin-bottom:25px; padding:25px;">
-                    <div style="display:block;overflow:hidden;font-weight:bold;letter-spacing:.5px;color:green">
-                        <h1>Overall Members Population</h1>
-                        <!-- Doughnut Chart Container -->
-                        <div class="chart-container1 flex-1">
-
-                            <canvas id="membershipDoughnutChart" width="800" height="400"></canvas>
-                        </div>
+            <div class="flex flex-wrap justify-center items-center my-10" style="overflow:hidden !important">
+                <div class="flex flex-col items-center bg-white shadow-md rounded-lg p-6 mx-4"
+                    style="overflow:hidden !important;height:420px;background-color:transparent ">
+                    <h1 class="text-xl font-bold text-green-600 mb-4" style="color:#124137;">Overall Members Population
+                    </h1>
+                    <!-- Doughnut Chart Container -->
+                    <div class="chart-container1 w-full max-w-lg" style="width:350px;overflow:hidden;">
+                        <?php include 'membership_chart.php' ?>
+                        <canvas class="overall" id="membershipPieChart" style="height:300px;"></canvas>
                     </div>
                 </div>
-                <div class="chart-container2" style="margin-left:100px">
-                    <canvas id="stockHistoryChart" width="400" height="400"></canvas>
-                </div>
-                <!--====================STOCK HISTORY REPORT SECTION=================================-->
+                <div id="chartContainer-Expenses" style="height:500px">
 
+                    <canvas id="chartContainer-expenses" style="width:400px;"></canvas>
+                </div>
             </div>
+
             <!--=====================Recent Customers Table ====================================-->
-            <div class="recent-customers mt-8 flex">
-                <table class="recent-table">
+            <div class="recent-customers mt-8 flex" style="border:none!important; border-radius:20px">
+                <table class="recent-table"
+                    style="background-color:white!important;border:none!important; border-radius:20px;box-shadow:none!important">
                     <thead>
                         <tr>
                             <th colspan="3" class="" style="font-size:20px;color:green;">
@@ -824,19 +827,18 @@ function toggleSidebar1() {
                                 Customers
                             </th>
                         </tr>
-                        <tr style="white-space:nowrap;color:gray;">
+                        <tr>
                             <th class="border px-4 py-2">Membership Type</th>
                             <th class="border px-4 py-2">Customer</th>
                             <th class="border px-4 py-2">Total Cost</th>
                         </tr>
-                        <?php 
-                        include 'recent_customer.php';
-                    ?>
+                        <td style="background-color:white!important">
+                            <?php 
+                            include 'recent_customer.php';
+                        ?></td>
                     </thead>
                 </table>
-                <div id="chartContainer-Expenses" class="hidden">
-                    <canvas id="chartContainer-expenses" style="width:400px;"></canvas>
-                </div>
+
             </div>
 
             <!--=====================Recent Customers Table ====================================-->
@@ -892,125 +894,9 @@ function toggleSidebar1() {
 
         <!-- ============================Products Section================================-->
         <div id="products" class="section hidden">
-            <h1 class="font-bold text-gray-500 hear-product-text mt-10"
-                style="margin-top:40px;font-size:30px;margin-bottom:20px;color:#124137;">Product
-                Statistics</h1>
-
-            <div class="chart-container">
-                <!-- Line Chart -->
-                <div class="chart-wrapper1">
-                    <canvas id="productLineChart"></canvas>
-                </div>
-                <!-- Doughnut Chart Container -->
-                <div class="chart-wrapper">
-                    <canvas id="productDoughnutChart"></canvas>
-                </div>
-            </div>
-            <script>
-            document.addEventListener('DOMContentLoaded', function() {
-
-                const supplements = <?php echo json_encode($typeTotals['Supplements']); ?>;
-                const snacks = <?php echo json_encode($typeTotals['Snacks']); ?>;
-                const other = <?php echo json_encode($typeTotals['Other']); ?>;
-
-                const ctxLine = document.getElementById('productLineChart').getContext('2d');
-                new Chart(ctxLine, {
-                    type: 'line',
-                    data: {
-                        labels: ['Supplements', 'Snacks', 'Other'],
-                        datasets: [{
-                            label: 'Number of Products',
-                            data: [supplements, snacks, other],
-                            borderColor: [
-                                '#13ce4b',
-                                '#f8e006',
-                                '#f84b06'
-                            ],
-                            backgroundColor: 'rgba(0,0,0,0)',
-                            fill: false,
-                            tension: 0.4
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Product Types'
-                                }
-                            },
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Number of Products'
-                                }
-                            }
-                        },
-                        animation: {
-                            animateRotate: true,
-                            animateScale: true,
-                            duration: 1500
-                        },
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top'
-                            }
-                        }
-                    }
-                });
-
-                // Doughnut chart
-                const ctxDoughnut = document.getElementById('productDoughnutChart').getContext('2d');
-                new Chart(ctxDoughnut, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Supplements', 'Snacks', 'Other'],
-                        datasets: [{
-                            label: 'Number of Products',
-                            data: [supplements, snacks, other],
-                            backgroundColor: [
-                                '#13ce4b',
-                                '#f8e006',
-                                '#f84b06'
-                            ],
-                            borderColor: [
-                                'rgba(255, 255, 255, 1)'
-                            ],
-                            borderWidth: 5
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top'
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(tooltipItem) {
-                                        return `${tooltipItem.label}: ${tooltipItem.raw}`;
-                                    }
-                                }
-                            }
-                        },
-                        animation: {
-                            animateRotate: true,
-                            animateScale: true,
-                            duration: 1500
-                        }
-                    }
-                });
-            });
-            </script>
-
-            <div class="container">
-                <form action="" method="GET" class="search-form">
+            <div class="container"
+                style="background-color:transparent;border:none !important;box-shadow:none!important">
+                <form action="" method="GET" class="search-form" style="height:45px;border-radius:15px;">
                     <img src="../Assets/search_icon.png" class="search-icon" alt="Search Icon">
                     <input type="text" name="search" placeholder="Search" class="search-input"
                         value="<?php echo htmlspecialchars($searchQuery); ?>">
@@ -1031,10 +917,10 @@ function toggleSidebar1() {
             </div>
 
             <!-- Product Table -->
-            <div class="p-4 mt-6 bg-white shadow-md rounded-md">
-                <div class="table-container" style="margin-left:-15px;">
+            <div class="p-4 mt-6 bg-white rounded-md" style="border:none!important;margin-top:20px;">
+                <div class="table-container" style="margin-left:-15px;border:none!important; box-shadow:none!important">
                     <!-- Table HTML -->
-                    <table class="min-w-full bg-white border border-gray-200 rounded-md shadow-md">
+                    <table class="min-w-full bg-white border rounded-md " style="border:none!important">
                         <thead class="bg-gray-100 text-gray-700">
                             <tr>
                                 <th class="p-3 border-b"></th>
@@ -1055,97 +941,164 @@ function toggleSidebar1() {
             </div>
         </div>
 
+        <?php
+            include 'fetch_staff_members.php'; 
+            include 'fetch_members.php'; 
 
-        <!--=================== Membership Section =================================-->
+            $itemsPerPage = 10; 
+            $totalMembers = count($members); 
+            $totalPages = ceil($totalMembers / $itemsPerPage); 
+            $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
+            $currentPage = max(1, min($currentPage, $totalPages)); 
+            $offset = ($currentPage - 1) * $itemsPerPage; 
+
+        $paginatedMembers = array_slice($members, $offset, $itemsPerPage);
+        ?>
+
         <div id="membership" class="section hidden p-4">
-            <div class="member-people text-center justify-center">
-                <img src="../Assets/member_people.png" style="width:250px">
-            </div>
-            <div class="flex justify-start mb-10 btn-add-member">
-                <!-- Add Member Button -->
+            <div class="flex justify-between mb-10 btn-add-member">
+                <div class="membership-title" style="font-size: 25px; margin-right: 10px;">Memberships</div>
+                <div class="search-container flex items-center ml-auto">
+                    <div class="relative">
+                        <input type="text" id="searchInput" oninput="filterMembers()" placeholder="Search members..."
+                            class="border rounded-md p-2 pl-10 mr-2" />
+                        <i class="fas fa-search absolute left-3 top-2.5"></i>
+                    </div>
+                    <input type="date" id="searchDate" oninput="filterMembers()" class="border rounded-md p-2 ml-2" />
+                    <select id="staffDropdown" onchange="filterMembers()"
+                        class="border text-gray-600 rounded-md p-2 ml-2" style="color:gray;">
+                        <option value="">added by</option>
+                        <?php foreach ($staffMembers as $staff): ?>
+                        <option
+                            value="<?php echo htmlspecialchars($staff['first_name'] . ' ' . $staff['last_name']); ?>">
+                            <?php echo htmlspecialchars($staff['first_name'] . ' ' . $staff['last_name']); ?>
+                        </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
                 <div class="add-member-button flex items-center">
-                    <button id="openModalButton" onclick="showAddMembershipModal()" style="background-color:#009b7b"
-                        class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Add Member</button>
+                    <button id="openModalButton" class="flex" onclick="showAddMembershipModal()"
+                        style="background-color:#009b7b"
+                        class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 ml-2"><img
+                            src="../Assets/plus_icon.png" style="margin-right:10px;margin-left:-10px;"> Add
+                        Member</button>
                 </div>
             </div>
-            <!-- Member Tables -->
-            <?php
-            include 'fetch_members.php';
 
-            $membershipTypes = ['daily-basic', 'daily-pro', 'monthly-basic', 'monthly-pro'];
-
-            $membersByType = [];
-            $totalSalesByType = [];
-            $overallTotal = 0;
-
-            foreach ($membershipTypes as $type) {
-                $membersByType[$type] = [];
-                $totalSalesByType[$type] = 0;
-            }
-
-            foreach ($members as $member) {
-                $type = $member['membership_type'];
-                if (array_key_exists($type, $membersByType)) {
-                    $membersByType[$type][] = $member;
-                    $totalSalesByType[$type] += $member['total_cost'];
-                    $overallTotal += $member['total_cost'];
-                }
-            }
-            ?>
-
+            <div class="filter-buttons">
+                <button id="dailyButton" onclick="filterMembership('daily')" class="filter-btn active">Daily</button>
+                <button id="monthlyButton" onclick="filterMembership('monthly')" class="filter-btn">Monthly</button>
+            </div>
 
             <div class="flex-container mt-6">
-                <?php foreach ($membershipTypes as $type): ?>
-                <?php if (count($membersByType[$type]) > 0): ?>
-                <div class="flex-item mb-6">
-                    <h2 class="MembershipHead"><?php echo htmlspecialchars(ucwords(str_replace('-', ' ', $type))); ?>
-                    </h2>
-                    <table class="min-w-full divide-y divide-gray-200">
+                <?php if (count($paginatedMembers) > 0): ?>
+                <div class="flex-item mb-6" style="border-radius:20px !important;">
+                    <table class="min-w-full divide-y divide-gray-200"
+                        style="border-radius:20px !important;border: none!important" id="memberTable">
                         <thead>
                             <tr>
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Name</th>
+                                    MEMBER NAME</th>
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Total </th>
+                                    TYPE</th>
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Membership Status</th>
+                                    START DATE</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    AMOUNT</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    ADDED BY</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    STATUS</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <?php foreach ($membersByType[$type] as $member): ?>
-                            <tr>
+                            <?php foreach ($paginatedMembers as $member): ?>
+                            <tr class="member-row" data-type="<?php echo $member['membership_type']; ?>"
+                                data-start-date="<?php echo $member['membership_start']; ?>">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <?php echo htmlspecialchars($member['first_name']) . ' ' . htmlspecialchars($member['last_name']); ?>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap flex items-center">
-                                    <img style="width:20px;height:20px;" src="../Assets/pesos.png" alt="Peso Sign"
-                                        class="inline-block" />
-                                    <span class="ml-2"><?php echo number_format($member['total_cost'], 2); ?></span>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <?php echo htmlspecialchars(ucwords(str_replace('-', ' ', $member['membership_type']))); ?>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div>
+                                        <?php echo htmlspecialchars(date('F j, Y', strtotime($member['membership_start']))); ?>
+                                        <br>
+                                        <small>
+                                            <?php 
+                                                echo htmlspecialchars(date('h:i A', strtotime($member['membership_start'])));
+                                                ?>
+                                        </small>
+
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap flex items-center align-center">
+                                    <span class="ml-5">₱ <?php echo number_format($member['total_cost'], 2); ?></span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <?php echo htmlspecialchars($member['added_by']); ?>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <?php echo $member['remaining_time']; ?>
                                     <?php if (strpos($member['remaining_time'], 'Expired') !== false): ?>
-                                    <button class=" renew-btn " style="background-color:#009b7b"
+                                    <button class="renew-btn" style="background-color:orange"
                                         onclick="showRenewModal(<?php echo htmlspecialchars(json_encode($member)); ?>)">Renew</button>
                                     <?php endif; ?>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
-
                     </table>
-                </div>
-                <?php endif; ?>
-                <?php endforeach; ?>
-            </div>
 
-            <?php if (array_sum(array_map('count', $membersByType)) == 0): ?>
-            <p class='mt-4 text-gray-600 no-members'>No members found.</p>
-            <?php endif; ?>
+                    <p id="notFoundMessage" class="mt-10 text-red-600 hidden"
+                        style="color:red;margin-top:30px; margin-left:30px;">No members found.</p>
+
+                    <div class="pagination">
+                        <!-- Back Button -->
+                        <a class="flex"
+                            style="color:gray;border-radius:8px; <?php echo $currentPage == 1 ? 'opacity:0.5;cursor: not-allowed;' : ''; ?>"
+                            href="?page=<?php echo max(1, $currentPage - 1); ?>#membership">
+                            <img src="../Assets/back_paginate.png" style="margin-top:3px">Back
+                        </a>
+
+                        <!-- Page Numbers -->
+                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <a style="border:1.5px solid #CACACA;border-radius:8px;"
+                            href="?page=<?php echo $i; ?>#membership"
+                            class="<?php echo $currentPage == $i ? 'active' : ''; ?>">
+                            <?php echo $i; ?>
+                        </a>
+                        <?php endfor; ?>
+
+                        <!-- Next Button -->
+                        <a class="flex"
+                            style="color:gray;border-radius:8px; <?php echo $currentPage == $totalPages ? ' cursor: not-allowed;opacity:0.5;' : ''; ?>"
+                            href="?page=<?php echo min($totalPages, $currentPage + 1); ?>#membership">
+                            Next<img src="../Assets/next_paginate.png" style="margin-top:3px">
+                        </a>
+
+                        <!-- Pagination Range Info -->
+                        <span style="color:#5E5757;margin-top:10px;margin-left:40px;">
+                            <?php echo ($offset + 1) . '-' . min($offset + $itemsPerPage, $totalMembers) . ' out of ' . $totalMembers . ' '. 'Results' ?>
+                        </span>
+                    </div>
+
+
+                </div>
+                <?php else: ?>
+                <p class='mt-4 text-gray-600 no-members'>No members found.</p>
+                <?php endif; ?>
+            </div>
         </div>
+
+
         <!--================================= Renew Membership Modal =======================================-->
         <div id="renewMemberModal"
             class="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 hidden z-50">
@@ -1388,9 +1341,7 @@ function toggleSidebar1() {
 
                 <style>
                 .progress-block {
-
                     flex-direction: column;
-
                 }
                 </style>
                 <!-- Report Insights -->
@@ -1514,67 +1465,6 @@ function toggleSidebar1() {
                 </form>
             </div>
             <style>
-            /* Pagination styles */
-            .pagination {
-                display: flex;
-                justify-content: center;
-                padding: 15px 0;
-                background-color: #eaeaea;
-                /* Light background for contrast */
-                border-radius: 8px;
-                /* Rounded corners */
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                /* Subtle shadow */
-            }
-
-            .page-item {
-                margin: 0 8px;
-            }
-
-            .page-link {
-                padding: 10px 15px;
-                background-color: #009B7B;
-                /* Theme color */
-                color: white;
-                border-radius: 5px;
-                text-decoration: none;
-                font-weight: bold;
-                /* Bold text for emphasis */
-                transition: background-color 0.3s, transform 0.2s;
-                /* Transition for smooth hover effect */
-            }
-
-            .page-link:hover {
-                background-color: #007a66;
-                /* Darker shade on hover */
-                transform: translateY(-2px);
-                /* Lift effect on hover */
-            }
-
-            .payment-button-container {
-                display: flex;
-                justify-content: space-between;
-                margin-top: 30px;
-                /* Increased space above buttons */
-            }
-
-            .payment-button-container button {
-                flex: 1;
-                margin: 0 10px;
-                padding: 12px;
-                border: none;
-                border-radius: 20px;
-                /* Rounded corners */
-                cursor: pointer;
-                /* Pointer cursor on hover */
-                transition: background-color 0.3s, transform 0.2s;
-                /* Smooth transition */
-                font-weight: bold;
-                /* Bold text */
-                color: white;
-                /* White text for contrast */
-            }
-
             .payment-button-container .mark-paid-button {
                 background-color: #009B7B;
                 /* Green for paid */
@@ -1659,13 +1549,24 @@ function toggleSidebar1() {
                 </div>
             </div>
 
+            <table id="membersList" class="members-table"
+                style="width:100%; border-collapse:collapse; margin-top:20px;">
+                <thead>
+                    <tr>
+                        <th>Profile</th>
+                        <th>Name</th>
+                        <th>Membership Type</th>
+                        <th>Total Cost</th>
+                        <th>Paid Status</th>
+                        <th>Items</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be dynamically added here -->
+                </tbody>
+            </table>
 
-            <!-- =====Search Form -->
-            <div id="membersList" class="grid-container">
-                <div class="green-circles flex">
-                    <p>No members found</p>
-                </div>
-            </div>
             <div id="pagination" class="pagination-container"></div>
 
 
@@ -1738,89 +1639,157 @@ function toggleSidebar1() {
                         <input type="text" class="search-item" id="searchInput" placeholder="Search products..."
                             onkeyup="filterProducts()">
                     </div>
+                    <?php
+                        // Function to sanitize productId for use in HTML IDs
+                        function sanitizeId($id) {
+                            return preg_replace('/[^a-zA-Z0-9_-]/', '_', $id);
+                        }
 
-                    <div class="WRAP" id="productContainer">
-                        <?php
-            // Function to sanitize productId for use in HTML IDs
-            function sanitizeId($id) {
-                return preg_replace('/[^a-zA-Z0-9_-]/', '_', $id);
-            }
-            function highlightSearchTerm($text, $searchTerm) {
-                $searchTerm = preg_quote($searchTerm, '/');
-                return preg_replace('/('.$searchTerm.')/iu', '<mark>$1</mark>', $text);
-            }
+                        function highlightSearchTerm($text, $searchTerm) {
+                            $searchTerm = preg_quote($searchTerm, '/');
+                            return preg_replace('/('.$searchTerm.')/iu', '<mark>$1</mark>', $text);
+                        }
 
-            include 'connection.php';
-            $sql = "SELECT * FROM AddProducts";
-            $result = $conn->query($sql);
+                        include 'connection.php';
 
-            $searchTerm = isset($_GET['search']) ? strtolower($_GET['search']) : '';
+                        // Define pagination parameters
+                        $itemsPerPage = 10; // Change this to the number of items you want per page
+                        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                        $offset = ($currentPage - 1) * $itemsPerPage;
 
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $image = $row['image'];
-                    $productName = htmlspecialchars($row['ProductName']);
-                    $price = number_format((float)$row['Price'], 2, '.', '');
-                    $stocks = htmlspecialchars($row['Stocks']);
-                    $Id = sanitizeId(htmlspecialchars($row['id']));
-                    $imgSrc = !empty($image) ? 'data:image/jpeg;base64,' . base64_encode($image) : 'path/to/default/image.jpg';
-            
-                    // Highlight search term in product name
-                    $highlightedName = $productName;
-                    if ($searchTerm) {
-                        $highlightedName = highlightSearchTerm($highlightedName, $searchTerm);
-                    }
-            
-                    // Determine if the product is out of stock
-                    $outOfStockClass = ($stocks <= 0) ? 'out-of-stock-message' : 'hidden';
-                    $isOutOfStock = ($stocks <= 0) ? 'disabled' : '';
-            
-                    echo "<div class='product-box' data-product-name='" . strtolower($productName) . "'>";
-                    echo "<div class='bottom-line' style='border-bottom:2px solid green;width:100%;margin-bottom:17px;'>";
-            
-                    echo "<div class='product-image-container'>
-                            <div class='$outOfStockClass'>Out of Stock</div>
-                            <img src='" . $imgSrc . "' alt='Product Image' class='product-image'>
-                        </div>";
-            
-                    echo "<h2>" . $highlightedName . "</h2>";
-            
-                    // Price Container
-                    echo "<div class='price-flex'>
-                            <img src='../Assets/pesos.png' style='width:25px;height:25px;margin-top:10px;margin-right:7px;'>
-                            <p class='price-text'>" . $price . "</p>
-                        </div>";
-                    echo "</div>";
-            
-                    // Quantity Container
-                    echo "<div class='quantity-container'>";
-                    echo "<button class='quantity-btn-minus' onclick='updateItemQuantity(\"$Id\", -1)' $isOutOfStock></button>";
-                    echo "<input type='text' id='quantity_$Id' class='quantity-input' value='1' readonly>";
-                    echo "<button class='quantity-btn-plus' onclick='updateItemQuantity(\"$Id\", 1)' $isOutOfStock></button>";
-                    echo "</div>";
-            
-                    // Total Container
-                    echo "<div class='total-container flex'>";
-                    echo "<span class='total-label' style='margin-top:7px;font-size:17px;font-weight:bold;margin-right:13px;'>Total</span>";
-                    echo "<div class='price-container flex' style='display: flex; align-items: center;'>";
-                    echo "<img src='../Assets/pesos.png' class='currency-icon' style='width:25px;height:25px;margin-right:7px;'>";
-                    echo "<span id='totalItem_" . $Id . "' data-price='" . $price . "' class='total-price'>" . $price . "</span>";
-                    echo "</div>";
-                    echo "</div>";
-            
-                    // Add to Cart Button
-                    echo "<button class='add-to-cart-btn' style='background-color:#009b7b !important;color:white !important;' onclick='addToCart(\"$Id\")' $isOutOfStock>Add Item</button>";
-            
-                    echo "</div>";
-                }
-            } else {
-                echo "<p>No products found</p>";
-            }
-            $conn->close();
-            ?>
-                    </div>
+                        // Get the total number of products
+                        $totalSql = "SELECT COUNT(*) AS total FROM AddProducts";
+                        $totalResult = $conn->query($totalSql);
+                        $totalRow = $totalResult->fetch_assoc();
+                        $totalItems = $totalRow['total'];
+                        $totalPages = ceil($totalItems / $itemsPerPage);
+
+                        // Fetch products for the current page
+                        $sql = "SELECT * FROM AddProducts LIMIT $itemsPerPage OFFSET $offset";
+                        $result = $conn->query($sql);
+
+                        $searchTerm = isset($_GET['search']) ? strtolower($_GET['search']) : '';
+
+                        if ($result->num_rows > 0) {
+                            echo "<table id='productTable' class='product-table'>";
+                            echo "<thead>";
+                            echo "<tr>";
+                            echo "<th>Image</th>";
+                            echo "<th>Product Name</th>";
+                            echo "<th>Price</th>";
+                            echo "<th>Quantity</th>";
+                            echo "<th>Total</th>";
+                            echo "<th>Add to Cart</th>";
+                            echo "</tr>";
+                            echo "</thead>";
+                            echo "<tbody>";
+
+                            while ($row = $result->fetch_assoc()) {
+                                $image = $row['image'];
+                                $productName = htmlspecialchars($row['ProductName']);
+                                $price = number_format((float)$row['Price'], 2, '.', '');
+                                $stocks = htmlspecialchars($row['Stocks']);
+                                $Id = sanitizeId(htmlspecialchars($row['id']));
+                                $imgSrc = !empty($image) ? 'data:image/jpeg;base64,' . base64_encode($image) : 'path/to/default/image.jpg';
+
+                                // Highlight search term in product name
+                                $highlightedName = $productName;
+                                if ($searchTerm) {
+                                    $highlightedName = highlightSearchTerm($highlightedName, $searchTerm);
+                                }
+
+                                // Determine if the product is out of stock
+                                $outOfStockClass = ($stocks <= 0) ? 'out-of-stock-message' : 'hidden';
+                                $isOutOfStock = ($stocks <= 0) ? 'disabled' : '';
+
+                                echo "<tr class='product-row'>";
+                                // Product Image
+                                echo "<td><div class='product-image-container'>
+                                        <div class='$outOfStockClass' style='font-size:6px;'>Out of Stock</div>
+                                        <img src='" . $imgSrc . "' alt='Product Image' class='product-image' style='width:40px;height:40px;'>
+                                    </div></td>";
+                                
+                                // Product Name
+                                echo "<td><h2>" . $highlightedName . "</h2></td>";
+
+                                // Price
+                                echo "<td>
+                                        <div class='price-flex'>
+                                        ₱ 
+                                            <p >" . $price . "</p>
+                                        </div>
+                                    </td>";
+
+                                // Quantity
+                                echo "<td>
+                                    <div class='quantity-container' style='display: flex; align-items: center;'>
+                                        <button style='background-color: red; color: white; border: none; width: 30px; height: 30px; font-size: 18px; text-align: center; padding: 0;' onclick='updateItemQuantity(\"$Id\", -1)' $isOutOfStock>-</button>
+                                        <input style='width: 50px; height: 30px; margin-top: 7px; text-align: center; border: 1px solid #ccc; margin: 0 10px;' type='text' id='quantity_$Id' class='quantity-input' value='1' readonly>
+                                        <button style='background-color: green; color: white; border: none; width: 30px; height: 30px; font-size: 18px; text-align: center; padding: 0;' onclick='updateItemQuantity(\"$Id\", 1)' $isOutOfStock>+</button>
+                                    </div>
+                                </td>";
+
+                                // Total Price
+                                echo "<td>
+                                        <div class='total-container flex'>
+                                            ₱
+                                            <span id='totalItem_" . $Id . "' data-price='" . $price . "' class='total-price'>" . $price . "</span>
+                                        </div>
+                                    </td>";
+
+                                // Add to Cart Button
+                                echo "<td>
+                                <button class='add-to-cart-btn' style='font-size:20px;width:40px;height:40px;color: white !important;border-radius:50%;text-align:center;display:flex;justify-content:center;align-items:center;' onclick='addToCart(\"$Id\")' $isOutOfStock>
+                                +
+                                </button>
+                                </td>";
+
+                                echo "</tr>";
+                            }
+
+                            echo "</tbody>";
+                            echo "</table>";
+
+                            // Pagination controls
+                            echo "<div class='pagination'>";
+                            $pageLimit = 5; // Limit to 5 page links
+                            $startPage = max(1, $currentPage - floor($pageLimit / 2));
+                            $endPage = min($totalPages, $startPage + $pageLimit - 1);
+
+                            // Adjust start page if it goes below 1
+                            if ($endPage - $startPage < $pageLimit - 1) {
+                                $startPage = max(1, $endPage - $pageLimit + 1);
+                            }
+
+                            // Previous button
+                            if ($currentPage > 1) {
+                                echo "<a href='?page=" . ($currentPage - 1) . "&search=" . htmlspecialchars($searchTerm) . "'>Previous</a> ";
+                            }
+
+                            // Page links
+                            for ($i = $startPage; $i <= $endPage; $i++) {
+                                if ($i == $currentPage) {
+                                    echo "<strong>$i</strong> ";
+                                } else {
+                                    echo "<a href='?page=$i&search=" . htmlspecialchars($searchTerm) . "'>$i</a> ";
+                                }
+                            }
+
+                            // Next button
+                            if ($currentPage < $totalPages) {
+                                echo "<a href='?page=" . ($currentPage + 1) . "&search=" . htmlspecialchars($searchTerm) . "'>Next</a>";
+                            }
+                            echo "</div>";
+
+                        } else {
+                            echo "<p>No products found</p>";
+                        }
+
+                        $conn->close();
+                        ?>
 
                 </div>
+
                 <div class="cart-display" id="cartDisplay" style="display: none;">
                     <div class="close-button" onclick="closeCart()">&times;</div> <!-- Close button -->
                     <h3><span id="memberNameDisplay"></span></h3>
@@ -1844,7 +1813,6 @@ function toggleSidebar1() {
                 </div>
 
             </div>
-
             <style>
             /* Staff Indicator */
             .staff-box {
@@ -2060,51 +2028,42 @@ function toggleSidebar1() {
                 </div>
             </div>
 
-            <div class="filter-container" style="margin-bottom:20px;">
-                <label for="startDate" style="margin-right:25px;">Expense Date</label>
-                <input type="date" id="startDate" name="startDate"
-                    class="border border-gray-300 rounded-md shadow-md p-2">
+            <!-- Filters -->
+            <div class="filter-container">
+                <input class="hidden" type="date" id="startDate" placeholder="Filter by Date" />
 
-                <label for="staffName" style="margin-right:25px;margin-left:25px;">Staff Name</label>
-                <input type="text" id="staffName" name="staffName" placeholder="Enter staff name"
-                    class="border border-gray-300 rounded-md shadow-md p-2">
-
-                <!-- Filter Button -->
-                <button onclick="applyFilters()"
-                    class="bg-blue-600 text-black px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300"
-                    style="background-color:#009B7B;color:white;margin-left:25px;">Search</button>
-
-                <!-- Clear Button -->
-                <button onclick="clearFilters()"
-                    class="bg-gray-400 text-red-600 px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300"
-                    style="background-color:red;color:white;margin-left:25px;">Clear</button>
             </div>
 
+            <!-- Expense Table -->
+            <table id="expenseTable" class="min-w-full" style="border-radius:20px;border: none!important">
+                <thead style="border-radius:20px !important">
+                    <tr>
+                        <th>Date</th>
+                        <th>Image</th>
+                        <th>Description</th>
+                        <th>Type</th>
+                        <th>Supplier</th>
+                        <th>Amount</th>
+                        <th>Staff Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
 
+            <!-- Pagination Controls -->
+            <div class="pagination" id="pagination">
+                <button id="prevBtn" class="flex" onclick="changePage(-1)" disabled> <img
+                        src="../Assets/back_paginate.png" style="margin-top:3px">Back</button>
 
-            <div id="expenseTableContainer" class="mt-4"
-                style="border-radius:15px !important; border:1px solid transparent!important;">
-                <table id="expenseTable" class="min-w-full border-collapse border"
-                    style="border:1px solid transparent!important;">
-                    <thead style="background-color:#FAFAFA;padding-top:20dp;padding-bottom:20dp;">
-                        <tr style="background-color:#FAFAFA;padding-top:20dp;padding-bottom:20dp;">
-                            <th class="border border-gray-300 px-4 py-2 text-left">Date</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Proof</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Expense Name</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Type</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Supplier</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Amount</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Added By</th>
-                            <th class="border border-gray-300 px-4 py-2 text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Rows will be populated dynamically -->
-                    </tbody>
-                </table>
+                <span id="paginationNumbers"></span>
+
+                <button id="nextBtn" class="flex" onclick="changePage(1)" disabled> Next <img
+                        src="../Assets/next_paginate.png" style="margin-top:3px"></button>
+
+                <span id="rangeInfo" style="margin-top:15px;margin-left:30px;color:#424141"></span>
+                <!-- Data Range Info -->
             </div>
-
-
 
             <!-- Modal Container -->
             <div id="modal-expenses" class="modal-expenses hidden">
@@ -2389,6 +2348,7 @@ function toggleSidebar1() {
         </div>
         <!--=============Loading Animation-->
         <script src="../JS/dashboard.js"></script>
+        <script src="../JS/pagination.js"></script>
         <script src="../JS/logout.js"></script>
         <script src="../JS/sales.js"></script>
         <script src="../JS/stocks.js"></script>
@@ -2402,69 +2362,6 @@ function toggleSidebar1() {
         <script src="../JS/update_file_product.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/1.9.3/countUp.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.0.2/index.min.js"></script>
-        <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var membershipData = {
-                'Daily-basic': <?php echo count($membersByType['daily-basic']); ?>,
-                'Daily-pro': <?php echo count($membersByType['daily-pro']); ?>,
-                'monthly-basic': <?php echo count($membersByType['monthly-basic']); ?>,
-                'monthly-pro': <?php echo count($membersByType['monthly-pro']); ?>
-            };
-
-            var data = {
-                labels: Object.keys(membershipData).map(type => {
-                    return type.replace('-', ' ').toUpperCase();
-                }),
-                datasets: [{
-                    data: Object.values(membershipData),
-                    backgroundColor: [
-                        'rgba(201, 81, 107, 0.692)',
-                        '#cf1a42',
-                        '#0ca506',
-                        'rgb(30, 128, 0)'
-                    ],
-                    hoverOffset: 20
-                }]
-            };
-
-            var ctx = document.getElementById('membershipDoughnutChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: {
-                        duration: 1000,
-                        animateRotate: true,
-                        animateScale: true
-                    },
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'right',
-                            align: 'start',
-                            labels: {
-                                boxWidth: 10,
-                                padding: 20
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(tooltipItem) {
-                                    var label = tooltipItem.label || '';
-                                    if (label) {
-                                        label += ': ' + tooltipItem.raw + ' members';
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    },
-                }
-            });
-        });
-        </script>
         <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/dist/index.global.min.js'></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/progressbar.js@1.1.0/dist/progressbar.min.js"></script>

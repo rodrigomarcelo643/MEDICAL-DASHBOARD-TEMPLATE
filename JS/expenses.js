@@ -355,31 +355,32 @@ document.addEventListener("DOMContentLoaded", (event) => {
       console.error("Error fetching renewed member data:", error); // Handle fetch errors
     });
 });
+let allExpenses = []; // This will hold the full list of expenses
+let currentPage = 1; // Start at page 1
+const itemsPerPage = 10; // Number of items per page
 
+// Fetch and load expenses
 function loadExpenses() {
-  // Fetch all expenses initially without any filters
   fetch("../p/get_expenses_list.php")
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok: " + response.statusText);
-      }
-      return response.json();
-    })
+    .then((response) => response.json())
     .then((data) => {
-      console.log("Fetched expenses:", data);
-      allExpenses = data; // Store all expenses globally
-      applyFilters(); // Apply filters after loading the data
+      allExpenses = data;
+      applyFilters(); // Apply filters and pagination
     })
-    .catch((error) => {
-      console.error("Error loading expenses:", error);
-    });
+    .catch((error) => console.error("Error loading expenses:", error));
 }
 
+// Filter and apply pagination to the table
 function applyFilters() {
-  const selectedDate = document.getElementById("startDate").value; // Treat this as the exact date
-  const staffName = document.getElementById("staffName").value.toLowerCase();
+  const selectedDate = document.getElementById("startDate").value;
+  const staffName = document
+    .getElementById("staffDropdown")
+    .value.toLowerCase();
+  const searchQuery = document
+    .getElementById("searchInput")
+    .value.toLowerCase();
 
-  // Filter expenses based on the input values
+  // Filter expenses based on the filters
   let filteredExpenses = allExpenses;
 
   if (selectedDate) {
@@ -396,42 +397,62 @@ function applyFilters() {
     );
   }
 
-  // Update the table with the filtered expenses
+  if (searchQuery) {
+    filteredExpenses = filteredExpenses.filter((expense) =>
+      (expense.description || "").toLowerCase().includes(searchQuery)
+    );
+  }
+
+  paginateExpenses(filteredExpenses);
+}
+
+// Pagination logic
+function paginateExpenses(expenses) {
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedExpenses = expenses.slice(startIndex, endIndex);
+
+  // Update the table
   const tableBody = document.querySelector("#expenseTable tbody");
   tableBody.innerHTML = "";
 
-  if (filteredExpenses.length > 0) {
-    filteredExpenses.forEach((expense) => {
+  if (paginatedExpenses.length > 0) {
+    paginatedExpenses.forEach((expense) => {
       const row = document.createElement("tr");
       row.innerHTML = `
-        <td class="border border-gray-300 px-4 py-2">${expense.date}</td>
-        <td class="border border-gray-300 px-4 py-2">
-          ${
-            expense.image
-              ? `<img src="${expense.image}" alt="Expense Image" class="h-12 w-12" style="max-width:50px; max-height:50px; width:auto; height:auto;"/>`
-              : "No Image"
-          }
-        </td>
-        <td class="border border-gray-300 px-4 py-2">${expense.description}</td>
-        <td class="border border-gray-300 px-4 py-2">${expense.type}</td>
-        <td class="border border-gray-300 px-4 py-2">${
-          expense.supplier || "N/A"
-        }</td>
-        <td class="border border-gray-300 px-4 py-2" style="white-space:nowrap"> P ${parseFloat(
-          expense.amount
-        ).toFixed(2)}</td>
-        <td class="border border-gray-300 px-4 py-2">${expense.full_name}</td>
-        <td class="border border-gray-300 px-4 py-2">
-          <div class="flex">
-            <img src="../Assets/view_expense.png" style='cursor:pointer; margin-right:6px; width:40px; height:40px;' onclick="ViewDetails(${JSON.stringify(
-              expense
-            ).replace(/"/g, "&quot;")})">
-            <img src="../Assets/delete_icon.png" style='cursor:pointer;width:35px; height:35px;' onclick="deleteExpense(${
-              expense.id
-            })" class="text-red-600 hover:text-red-800"></img>
-          </div>
-        </td>
-      `;
+                <td class="border border-gray-300 px-4 py-2">${
+                  expense.date
+                }</td>
+                <td class="border border-gray-300 px-4 py-2">${
+                  expense.image
+                    ? `<img src="${expense.image}" alt="Expense Image" class="h-12 w-12" style="max-width:50px; max-height:50px;"/>`
+                    : "No Image"
+                }</td>
+                <td class="border border-gray-300 px-4 py-2">${
+                  expense.description
+                }</td>
+                <td class="border border-gray-300 px-4 py-2">${
+                  expense.type
+                }</td>
+                <td class="border border-gray-300 px-4 py-2">${
+                  expense.supplier || "N/A"
+                }</td>
+                <td  style="white-space:nowrap!important" class="border border-gray-300 px-4 py-2">₱   ${parseFloat(
+                  expense.amount
+                ).toFixed(2)}</td>
+                <td class="border border-gray-300 px-4 py-2">${
+                  expense.full_name
+                }</td>
+                <td class="border border-gray-300 px-4 py-2">
+                    <div class="flex">
+                      <img src="../Assets/view_expense.png" style='cursor:pointer; margin-right:6px; width:40px; height:40px;' onclick="ViewDetails(${JSON.stringify(
+                        expense
+                      ).replace(/"/g, "&quot;")})">
+                        <img src="../Assets/delete_icon.png" style="cursor:pointer;width:35px; height:35px;" onclick="deleteExpense(${
+                          expense.id
+                        })" class="text-red-600 hover:text-red-800"></img>
+                    </div>
+                </td>`;
       tableBody.appendChild(row);
     });
   } else {
@@ -439,17 +460,59 @@ function applyFilters() {
     row.innerHTML = `<td colspan="8" class="border border-gray-300 px-4 py-2 text-center">No expenses found.</td>`;
     tableBody.appendChild(row);
   }
+
+  updatePaginationControls(expenses.length);
 }
 
-// Clear Filters Function
-function clearFilters() {
-  // Reset the input fields
-  document.getElementById("startDate").value = "";
-  document.getElementById("staffName").value = "";
+// Update pagination controls (page numbers, back/next buttons)
+function updatePaginationControls(totalItems) {
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const paginationNumbers = document.getElementById("paginationNumbers");
+  paginationNumbers.innerHTML = "";
 
-  // Reload all expenses (without filters)
+  // Generate page numbers
+  for (let i = 1; i <= totalPages; i++) {
+    const pageButton = document.createElement("button");
+    pageButton.innerText = i;
+    pageButton.classList.add("page-btn");
+    pageButton.style =
+      i === currentPage
+        ? "font-weight:bold; background-color:#009B7B;color:white;"
+        : "background-color:white;border:1px solid #CACACA;color:#646464";
+    pageButton.onclick = () => {
+      currentPage = i;
+      applyFilters();
+    };
+    paginationNumbers.appendChild(pageButton);
+  }
+
+  // Show/hide buttons based on the current page
+  document.getElementById("prevBtn").disabled = currentPage === 1;
+  document.getElementById("nextBtn").disabled = currentPage === totalPages;
+
+  // Update the range info (e.g., "1-10 of 50")
+  const rangeInfo = document.getElementById("rangeInfo");
+  const start = (currentPage - 1) * itemsPerPage + 1;
+  const end = Math.min(currentPage * itemsPerPage, totalItems);
+  rangeInfo.innerText = `${start}-${end} of ${totalItems} Results`;
+}
+
+// Change page (Back/Next buttons)
+function changePage(delta) {
+  currentPage += delta;
+  applyFilters();
+}
+
+// Clear filters and reload all expenses
+function clearFilters() {
+  document.getElementById("startDate").value = "";
+  document.getElementById("staffDropdown").value = "";
+  document.getElementById("searchInput").value = "";
   loadExpenses();
 }
+
+// Initialize expenses on page load
+window.onload = loadExpenses;
 
 // Attach the filter function to the button click
 document.querySelector("button").addEventListener("click", applyFilters);
@@ -523,17 +586,24 @@ document.addEventListener("DOMContentLoaded", loadExpenses);
 
 //================View EXPENSE DETAILS =========
 function ViewDetails(expense) {
-  // Populate modal fields
+  // Populate modal fields with expense details
   document.getElementById("modalTitle").innerText = expense.description;
   document.getElementById("modalDate").innerText = `Date: ${expense.date}`;
   document.getElementById("modalType").innerText = `Type: ${expense.type}`;
   document.getElementById("modalSupplier").innerText = `Supplier: ${
     expense.supplier || "N/A"
   }`;
-  document.getElementById("modalAmount").innerText = `Amount: P ${parseFloat(
+  document.getElementById("modalAmount").innerText = `Amount: ₱ ${parseFloat(
     expense.amount
   ).toFixed(2)}`;
-  document.getElementById("modalImage").src = expense.image;
+
+  // Check if an image exists
+  if (expense.image) {
+    document.getElementById("modalImage").src = expense.image;
+    document.getElementById("modalImage").style.display = "block"; // Show image
+  } else {
+    document.getElementById("modalImage").style.display = "none"; // Hide image if not available
+  }
 
   // Show the modal
   document.getElementById("modal-view-expense1").style.display = "block";
